@@ -9,7 +9,7 @@ generate-json: update-girs jsondoclet.so
 
 jsondoclet.so: JsonDoclet.vala
 	valac -C --pkg valadoc-1.0 --pkg json-glib-1.0 JsonDoclet.vala
-	gcc -shared -fPIC -o libdoclet.so JsonDoclet.c `pkg-config --cflags --libs valadoc-1.0 json-glib-1.0`
+	gcc -shared -fPIC -o libdoclet.so JsonDoclet.c $(shell pkg-config --cflags --libs valadoc-1.0 json-glib-1.0)
 	rm JsonDoclet.c
 
 update-girs:
