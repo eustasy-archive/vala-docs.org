@@ -1,6 +1,18 @@
 namespace DocGen {
     private const string OUTPUT_DIR = "docs";
 
+    public class Packagevisitor : Valadoc.Api.Visitor {
+        Json.Object output = new Json.Object ();
+
+        public override void visit_tree (Valadoc.Api.Tree tree) {
+            assert_not_reached ();
+        }
+
+        public override void visit_package (Valadoc.Api.Package package) {
+            assert_not_reached ();
+        }
+    }
+
     public class JsonDoclet : Valadoc.Doclet, Valadoc.Api.Visitor {
         public void process (Valadoc.Settings settings, Valadoc.Api.Tree tree, Valadoc.ErrorReporter errors) {
             info ("Json doclet loaded.");

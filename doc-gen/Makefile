@@ -7,11 +7,10 @@ generate-json: update-girs jsondoclet.so
 		--doclet . \
 		--driver 0.30
 
-jsondoclet.so: JsonDoclet.vala PackageVisitor.vala
-	valac -C --pkg valadoc-1.0 --pkg json-glib-1.0 JsonDoclet.vala PackageVisitor.vala
-	gcc -shared -fPIC -o libdoclet.so JsonDoclet.c PackageVisitor.c `pkg-config --cflags --libs valadoc-1.0 json-glib-1.0`
-	rm JsonDoclet.c PackageVisitor.c
-
+jsondoclet.so: JsonDoclet.vala
+	valac -C --pkg valadoc-1.0 --pkg json-glib-1.0 JsonDoclet.vala
+	gcc -shared -fPIC -o libdoclet.so JsonDoclet.c `pkg-config --cflags --libs valadoc-1.0 json-glib-1.0`
+	rm JsonDoclet.c
 
 update-girs:
 	if test -d girs; then \
