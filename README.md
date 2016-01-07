@@ -1,7 +1,17 @@
 # [vala-docs.org](https://vala-docs.org/)
 
 ## Installation
+### Requirements
 - PHP 5.6 or 7.0
+- `valadoc` package
+
+### Generating new json-docs
+```
+cd doc-gen
+make
+```
+The newest .vapi and .gir files are automatically downloaded from the [Vala-Girs repository][3].
+After generation is done there is one json file per package in `doc-gen/docs`.
 
 ## Contribution
 - Expect _everything_ to be HTTPS.
@@ -14,3 +24,4 @@
 
 [1]: https://github.com/erusev/parsedown-extra
 [2]: https://duckduckgo.com/search.html?kaj=m&kae=c&duck=yes&width=350&site=vala-docs.org&prefill=Search%20Vala%20Docs
+[3]: https://github.com/nemequ/vala-girs

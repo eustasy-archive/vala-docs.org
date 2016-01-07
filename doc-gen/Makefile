@@ -1,4 +1,5 @@
 generate-json: update-girs jsondoclet.so
+	rm -rf docs
 	valadoc \
 		-o docs \
 		--girdir girs/gir-1.0/ \
@@ -6,17 +7,17 @@ generate-json: update-girs jsondoclet.so
 		--doclet . \
 		--driver 0.30
 
-jsondoclet.so: jsondoclet.vala
-	valac -C --pkg valadoc-1.0 --pkg json-glib-1.0 jsondoclet.vala
-	gcc -shared -fPIC -o libdoclet.so jsondoclet.c $(shell pkg-config --cflags --libs valadoc-1.0 json-glib-1.0)
-	rm jsondoclet.c
+jsondoclet.so: JsonDoclet.vala PackageVisitor.vala
+	valac -C --pkg valadoc-1.0 --pkg json-glib-1.0 JsonDoclet.vala PackageVisitor.vala
+	gcc -shared -fPIC -o libdoclet.so JsonDoclet.c PackageVisitor.c `pkg-config --cflags --libs valadoc-1.0 json-glib-1.0`
+	rm JsonDoclet.c PackageVisitor.c
 
 
 update-girs:
 	if test -d girs; then \
-	    cd girs ; \
-	    git pull ; \
-	    cd .. ; \
+		cd girs ; \
+		git pull ; \
+		cd .. ; \
 	else \
-	    git clone https://github.com/nemequ/vala-girs.git girs ; \
+		git clone https://github.com/nemequ/vala-girs.git girs ; \
 	fi
