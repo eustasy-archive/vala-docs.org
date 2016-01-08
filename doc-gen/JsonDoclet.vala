@@ -79,18 +79,14 @@ namespace DocGen {
                 check_error_code (builder.write_attribute ("virtual", property.is_virtual.to_string ()));
 
                 if (property.getter != null) {
-                    check_error_code (builder.write_attribute ("getter_private", property.getter.is_private.to_string ()));
-                    check_error_code (builder.write_attribute ("getter_protected", property.getter.is_protected.to_string ()));
-                    check_error_code (builder.write_attribute ("getter_public", property.getter.is_public.to_string ()));
+                    check_error_code (builder.write_attribute ("getter_visibility", get_symbol_visibility (property.getter)));
                     check_error_code (builder.write_attribute ("getter_get", property.getter.is_get.to_string ()));
                 }
 
                 if (property.setter != null) {
-                    check_error_code (builder.write_attribute ("getter_private", property.setter.is_private.to_string ()));
-                    check_error_code (builder.write_attribute ("getter_protected", property.setter.is_protected.to_string ()));
-                    check_error_code (builder.write_attribute ("getter_public", property.setter.is_public.to_string ()));
-                    check_error_code (builder.write_attribute ("getter_set", property.setter.is_set.to_string ()));
-                    check_error_code (builder.write_attribute ("getter_construct", property.setter.is_construct.to_string ()));
+                    check_error_code (builder.write_attribute ("setter_visibility", get_symbol_visibility (property.setter)));
+                    check_error_code (builder.write_attribute ("setter_set", property.setter.is_set.to_string ()));
+                    check_error_code (builder.write_attribute ("setter_construct", property.setter.is_construct.to_string ()));
                 }
 
                 write_attribute_list_element (property.get_attributes ());
@@ -161,10 +157,7 @@ namespace DocGen {
             check_error_code (builder.write_attribute ("name", symbol.name));
 
             check_error_code (builder.write_attribute ("deprecated", symbol.is_deprecated.to_string ()));
-            check_error_code (builder.write_attribute ("internal", symbol.is_internal.to_string ()));
-            check_error_code (builder.write_attribute ("private", symbol.is_private.to_string ()));
-            check_error_code (builder.write_attribute ("protected", symbol.is_protected.to_string ()));
-            check_error_code (builder.write_attribute ("public", symbol.is_public.to_string ()));
+            check_error_code (builder.write_attribute ("visibility", get_symbol_visibility (symbol)));
 
             return true;
         }
@@ -211,6 +204,20 @@ namespace DocGen {
             }
 
             check_error_code (builder.end_element ());
+        }
+
+        private string get_symbol_visibility (Valadoc.Api.Symbol symbol) {
+            if (symbol.is_internal) {
+                return "internal";
+            } else if (symbol.is_private) {
+                return "private";
+            } else if (symbol.is_protected) {
+                return "protected";
+            } else if (symbol.is_public) {
+                return "public";
+            }
+
+            return "";
         }
     }
 
