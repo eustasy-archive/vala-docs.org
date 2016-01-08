@@ -5,11 +5,12 @@ generate-json: update-girs libdoclet.so
 		--girdir girs/gir-1.0/ \
 		--vapidir girs/vala/vapi/ \
 		--doclet . \
-		--driver 0.30
+		--driver 0.30 \
+		--deps
 
 libdoclet.so: JsonDoclet.vala
-	valac -C --pkg valadoc-1.0 --pkg json-glib-1.0 JsonDoclet.vala
-	gcc -shared -fPIC -o libdoclet.so JsonDoclet.c $(shell pkg-config --cflags --libs valadoc-1.0 json-glib-1.0)
+	valac -C --pkg valadoc-1.0 --pkg libxml-2.0 JsonDoclet.vala
+	gcc -shared -fPIC -o libdoclet.so JsonDoclet.c $(shell pkg-config --cflags --libs valadoc-1.0 libxml-2.0)
 	rm JsonDoclet.c
 
 update-girs:
