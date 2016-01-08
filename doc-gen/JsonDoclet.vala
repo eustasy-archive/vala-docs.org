@@ -103,6 +103,9 @@ namespace DocGen {
 
         public override void visit_field (Valadoc.Api.Field field) {
             if (write_node_element ("field", field)) {
+                check_error_code (builder.write_attribute ("static", field.is_static.to_string ()));
+                check_error_code (builder.write_attribute ("volatile", field.is_volatile.to_string ()));
+
                 write_attribute_list_element (field.get_attributes ());
                 end_node_element (field);
             }
@@ -124,6 +127,8 @@ namespace DocGen {
 
         public override void visit_delegate (Valadoc.Api.Delegate delegate) {
             if (write_node_element ("delegate", delegate)) {
+                check_error_code (builder.write_attribute ("static", delegate.is_static.to_string ()));
+
                 write_attribute_list_element (delegate.get_attributes ());
                 end_node_element (delegate);
             }
@@ -131,6 +136,9 @@ namespace DocGen {
 
         public override void visit_signal (Valadoc.Api.Signal signal) {
             if (write_node_element ("signal", signal)) {
+                check_error_code (builder.write_attribute ("dbus_visible", signal.is_dbus_visible.to_string ()));
+                check_error_code (builder.write_attribute ("virtual", signal.is_virtual.to_string ()));
+
                 write_attribute_list_element (signal.get_attributes ());
                 end_node_element (signal);
             }
@@ -138,6 +146,31 @@ namespace DocGen {
 
         public override void visit_method (Valadoc.Api.Method method) {
             if (write_node_element ("method", method)) {
+                check_error_code (builder.write_attribute ("abstract", method.is_abstract.to_string ()));
+                check_error_code (builder.write_attribute ("constructor", method.is_constructor.to_string ()));
+                check_error_code (builder.write_attribute ("dbus_visible", method.is_dbus_visible.to_string ()));
+                check_error_code (builder.write_attribute ("inline", method.is_inline.to_string ()));
+                check_error_code (builder.write_attribute ("override", method.is_override.to_string ()));
+                check_error_code (builder.write_attribute ("static", method.is_static.to_string ()));
+                check_error_code (builder.write_attribute ("virtual", method.is_virtual.to_string ()));
+                check_error_code (builder.write_attribute ("yields", method.is_yields.to_string ()));
+
+                if (method.return_type != null && method.return_type.data_type != null) {
+                    bool returns_array = false;
+
+                    if (method.return_type.data_type is Valadoc.Api.Pointer) {
+                        check_error_code (builder.write_attribute ("return_type", "void"));
+                    } else if (method.return_type.data_type is Valadoc.Api.Array) {
+                        check_error_code (builder.write_attribute ("return_type", ((Valadoc.Api.Node)((Valadoc.Api.TypeReference)((Valadoc.Api.Array)method.return_type.data_type).data_type).data_type).get_full_name ()));
+
+                        returns_array = true;
+                    } else {
+                        check_error_code (builder.write_attribute ("return_type", ((Valadoc.Api.Node)method.return_type.data_type).get_full_name ()));
+                    }
+
+                    check_error_code (builder.write_attribute ("returns_array", returns_array.to_string ()));
+                }
+
                 write_attribute_list_element (method.get_attributes ());
                 end_node_element (method);
             }
