@@ -85,10 +85,17 @@ namespace DocGen {
             check_error_code (builder.write_attribute ("name", symbol.name));
 
             check_error_code (builder.write_attribute ("deprecated", symbol.is_deprecated.to_string ()));
-            check_error_code (builder.write_attribute ("internal", symbol.is_internal.to_string ()));
-            check_error_code (builder.write_attribute ("private", symbol.is_private.to_string ()));
-            check_error_code (builder.write_attribute ("protected", symbol.is_protected.to_string ()));
-            check_error_code (builder.write_attribute ("public", symbol.is_public.to_string ()));
+
+            string visibility = "";
+            if (symbol.is_internal)
+                visibility = "internal";
+            else if (symbol.is_private)
+                visibility = "private";
+            else if (symbol.is_protected)
+                visibility = "protected";
+            else if (symbol.is_public)
+                visibility = "public";
+            check_error_code (builder.write_attribute ("visibility", visibility));
         }
     }
 
