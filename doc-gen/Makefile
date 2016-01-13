@@ -21,3 +21,17 @@ update-girs:
 	else \
 		git clone https://github.com/nemequ/vala-girs.git girs ; \
 	fi
+
+generate-all: update-girs libdoclet.so
+	rm -rf docs
+	for pkg in $(shell find /usr/share/vala-0.30/vapi -name '*.vapi' | cut -d '/' -f 6 | sed 's/\.vapi//'); do \
+		echo $$pkg; \
+		G_MESSAGES_DEBUG=all valadoc \
+			-o docs/$$pkg \
+			--pkg $$pkg \
+			--girdir girs/gir-1.0/ \
+			--vapidir girs/vala/vapi/ \
+			--doclet . \
+			--driver 0.30 \
+			--deps; \
+	done
