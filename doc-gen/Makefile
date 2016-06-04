@@ -1,3 +1,5 @@
+VALA_VERSION = $(shell vala --version | awk -F. '{ print "0."$$2 }')
+
 generate-json: update-girs libdoclet.so
 	rm -rf docs
 	G_MESSAGES_DEBUG=all valadoc \
@@ -5,7 +7,7 @@ generate-json: update-girs libdoclet.so
 		--girdir girs/gir-1.0/ \
 		--vapidir girs/vala/vapi/ \
 		--doclet . \
-		--driver 0.30 \
+		--driver $(VALA_VERSION) \
 		--deps
 
 libdoclet.so: JsonDoclet.vala
@@ -24,7 +26,7 @@ update-girs:
 
 generate-all: update-girs libdoclet.so
 	rm -rf docs
-	for pkg in $(shell find /usr/share/vala-0.30/vapi -name '*.vapi' | cut -d '/' -f 6 | sed 's/\.vapi//'); do \
+	for pkg in $(shell find /usr/share/vala-$(VALA_VERSION)/vapi -name '*.vapi' | cut -d '/' -f 6 | sed 's/\.vapi//'); do \
 		echo $$pkg; \
 		G_MESSAGES_DEBUG=all valadoc \
 			-o docs/$$pkg \
@@ -32,6 +34,6 @@ generate-all: update-girs libdoclet.so
 			--girdir girs/gir-1.0/ \
 			--vapidir girs/vala/vapi/ \
 			--doclet . \
-			--driver 0.30 \
+			--driver $(VALA_VERSION) \
 			--deps; \
 	done
