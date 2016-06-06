@@ -1,0 +1,361 @@
+/**
+ * Copyright 2016 eustasy
+ * The MIT License (MIT)
+ */
+
+/**
+ * Resets
+ */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+/**
+ * Typography
+ */
+body {
+    color: #111;
+
+    font-family: "Open Sans", "Droid Sans", Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+h2,
+h3 {
+    font-family: "Droid Serif", serif;
+    font-weight: 300;
+}
+
+p {
+    font-size: 14px;
+}
+
+/**
+ * Elements
+ */
+
+input {
+    width: 100%;
+    padding: 6px;
+
+    transition: all 200ms ease-in-out;
+
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+
+    font-size: 14px;
+}
+
+/**
+ * Page layout
+ */
+
+body {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+}
+
+header {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    overflow: hidden;
+    -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+            flex-direction: row;
+
+    max-height: 58px;
+    padding: 6px;
+
+    text-align: center;
+
+    color: #fff;
+    background-color: #403757;
+
+    font-size: 14px;
+
+    -webkit-flex: 0 0 auto;
+        -ms-flex: 0 0 auto;
+            flex: 0 0 auto;
+}
+
+header * {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+header a {
+    text-decoration: none;
+
+    color: inherit;
+}
+
+header > div.search {
+    position: absolute;
+    top: 84px;
+    left: -100vw;
+
+    width: 75vw;
+    max-width: 300px;
+    padding: 14px 10px;
+
+    transition: left 100ms ease-in-out;
+
+    border-right: 1px solid #09080d;
+    background-color: #403757;
+}
+
+header > div.search.active {
+    left: 0;
+}
+
+header > div.branding {
+    overflow: hidden;
+
+    min-width: 192px;
+    max-height: 47.72px;
+
+    -webkit-align-items: center;
+         -ms-flex-align: center;
+     -ms-grid-row-align: center;
+            align-items: center;
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+    -webkit-flex: 9999 0 192px;
+        -ms-flex: 9999 0 192px;
+            flex: 9999 0 192px;
+}
+
+header > div.branding > * {
+    margin: 10px;
+}
+
+header > div.branding > div {
+    width: 32px;
+    height: 32px;
+    margin: 4px;
+
+    cursor: pointer;
+
+    border: 1px solid #09080d;
+    border-radius: 3px;
+    text-shadow: 0 1px rgba(19, 17, 26, 0.05);
+
+    font-size: 18px;
+
+    -webkit-flex: 0 0 auto;
+        -ms-flex: 0 0 auto;
+            flex: 0 0 auto;
+    -webkit-justify-content: center;
+              -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-align-items: center;
+         -ms-flex-align: center;
+     -ms-grid-row-align: center;
+            align-items: center;
+    text-rendering: geometricPrecision;
+}
+
+header > div.branding > div:active {
+    background-color: rgba(95, 82, 128, 0.6);
+}
+
+header > div.branding > a {
+    -webkit-flex: 1 0 auto;
+        -ms-flex: 1 0 auto;
+            flex: 1 0 auto;
+    -webkit-justify-content: center;
+              -ms-flex-pack: center;
+            justify-content: center;
+}
+
+header > div.branding > span {
+    height: 27.719px;
+
+    -webkit-flex: 9999 1 auto;
+        -ms-flex: 9999 1 auto;
+            flex: 9999 1 auto;
+    -webkit-align-items: flex-end;
+         -ms-flex-align: end;
+     -ms-grid-row-align: flex-end;
+            align-items: flex-end;
+}
+
+header > ul.links {
+    position: absolute;
+    top: 0;
+    left: -100vw;
+
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+
+    width: 75vw;
+    max-width: 300px;
+
+    transition: left 100ms ease-in-out;
+
+    border-right: 1px solid #09080d;
+    background-color: #403757;
+}
+
+header > ul.links.active {
+    left: 0;
+}
+
+header > ul li {
+    width: 100%;
+    height: 42px;
+
+    border-bottom: 1px solid #09080d;
+
+    -webkit-align-items: center;
+         -ms-flex-align: center;
+     -ms-grid-row-align: center;
+
+                align-items: center;
+    -webkit-justify-content: center;
+              -ms-flex-pack: center;
+            justify-content: center;
+}
+
+header > ul li:hover {
+    background-color: rgba(95, 82, 128, 0.6);
+}
+
+main {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    overflow: hidden;
+    -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+            flex-direction: row;
+
+    -webkit-flex: 1 1 auto;
+        -ms-flex: 1 1 auto;
+            flex: 1 1 auto;
+    -webkit-flex-wrap: nowrap;
+        -ms-flex-wrap: nowrap;
+            flex-wrap: nowrap;
+    -webkit-align-items: stretch;
+         -ms-flex-align: stretch;
+            align-items: stretch;
+    -webkit-align-content: flex-start;
+       -ms-flex-line-pack: start;
+            align-content: flex-start;
+}
+
+main > * {
+    height: 100%;
+}
+
+main > .sidebar {
+    position: absolute;
+    bottom: 0;
+    left: -100vw;
+
+    overflow-y: auto;
+
+    width: 75vw;
+    max-width: 300px;
+    height: calc(100% - 142px);
+    padding: 10px;
+
+    transition: left 100ms ease-in-out;
+
+    border-right: 1px solid #dedede;
+    background-color: #fcfcfc;
+}
+
+main > .sidebar.active {
+    left: 0;
+}
+
+main > div.content {
+    padding: 10px;
+}
+
+footer {
+    -webkit-flex: 0 0 auto;
+        -ms-flex: 0 0 auto;
+            flex: 0 0 auto;
+}
+
+@media (min-width: 580px) {
+    header > div.search {
+        top: 0;
+    }
+
+    header > ul.links {
+        position: static;
+
+        -webkit-flex-direction: row;
+            -ms-flex-direction: row;
+                flex-direction: row;
+
+        width: auto;
+        max-width: none;
+
+        border-right: none;
+
+        -webkit-align-items: center;
+             -ms-flex-align: center;
+         -ms-grid-row-align: center;
+        align-items: center;
+        -webkit-justify-content: center;
+                  -ms-flex-pack: center;
+                justify-content: center;
+    }
+
+    header > ul li {
+        padding: 10px;
+
+        border-bottom: none;
+        border-radius: 3px;
+    }
+
+    main > div.sidebar {
+        height: calc(100% - 58px);
+    }
+}
+
+@media (min-width: 900px) {
+    header > div.search {
+        position: static;
+
+        padding: 8px 4px;
+
+        border: none;
+    }
+
+    header > div.branding > div[js-toggle~=".sidebar"] {
+        display: none;
+    }
+
+    main > div.sidebar {
+        position: static;
+        left: 0;
+
+        display: block;
+
+        width: 310px;
+        max-width: none;
+        height: auto;
+    }
+}

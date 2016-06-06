@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
         <meta name="theme-color" content="#403757">
 
         <title><?php echo isset($page['title']) ? $page['title'] . ' &sdot; ' : false ; ?>vala-docs</title>
@@ -21,16 +21,19 @@
     </head>
     <body>
         <header>
-            <a href="/">
-                <img src="/assets/images/site/logo.svg" alt="vala logo">
+            <div class="search">
+                <input type="text" placeholder="Search">
+            </div>
+            <div class="branding">
+                <div js-toggle=".sidebar .search .links">&#9776;</div>
+                <a href="/">
+                    <img src="/assets/images/site/logo.svg" alt="vala logo">
+                </a>
                 <span>Stays crunchy, even in milk.</span>
-            </a>
-            <input type="text" placeholder="Search">
-            <ul>
-                <a href="#">thing 1</a>
-                <a href="#">thing 1</a>
-                <a href="#">thing 1</a>
-                <a href="#">thing 1</a>
+            </div>
+            <ul class="links">
+                <a href="/tutorial"><li>Tutorial</li></a>
+                <a href="https://github.com/eustasy/vala-docs.org"><li>GitHub</li></a>
             </ul>
         </header>
         <main>
