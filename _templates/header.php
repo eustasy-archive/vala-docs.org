@@ -20,20 +20,126 @@
         <?php echo !empty($page['scripts']) ? $page['scripts'] : false ; ?>
     </head>
     <body>
-        <header>
+        <nav class="sidebar">
             <div class="search">
                 <input type="text" placeholder="Search">
             </div>
-            <div class="branding">
-                <div js-toggle=".sidebar .search .links">&#9776;</div>
-                <a href="/">
-                    <img src="/assets/images/site/logo.svg" alt="vala logo">
-                </a>
-                <span>Stays crunchy, even in milk.</span>
-            </div>
-            <ul class="links">
-                <a href="/tutorial"><li>Tutorial</li></a>
-                <a href="https://github.com/eustasy/vala-docs.org"><li>GitHub</li></a>
+            <ul>
+                <ul>
+                    <a href="#"><li>Packages</li></a>
+                </ul>
+                <ul>
+                    <a href="#"><li>clutterless</li></a>
+                </ul>
+                <ul>
+                    <a href="#"><li>Clutterless</li></a>
+                    <a href="#"><li>Clutterless.html</li></a>
+                    <a href="#"><li>Clutterless.css</li></a>
+                    <a href="#"><li>Clutterless.javascript</li></a>
+                    <a href="#"><li>Clutterless.json</li></a>
+                    <a href="#"><li>Clutterless.yaml</li></a>
+                </ul>
+                <ul>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                    <a href="#"><li>Function</li></a>
+                </ul>
             </ul>
-        </header>
+        </nav>
         <main>
+            <header>
+                <div>
+                    <div class="sidebar-menu">&#9776;</div>
+                    <a href="/">
+                        <img src="/assets/images/site/logo.svg" alt="vala logo" height="42px" width="121.75px">
+                    </a>
+                    <span>Stays crunchy, even in milk.</span>
+                </div>
+            </header>
+            <div class="content">

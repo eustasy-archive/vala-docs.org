@@ -4,9 +4,7 @@
     include $templates['header'];
 ?>
 
-<div class="content">
-    <h1>Tutorial</h1>
-</div>
+<h1>Tutorial</h1>
 
 <?php
     include $templates['footer'];
