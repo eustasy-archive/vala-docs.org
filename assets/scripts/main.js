@@ -30,6 +30,10 @@ $(function() {
     var t = ".sidebar-menu";
     var s = "nav.sidebar";
     var i = "nav.sidebar div.search input";
+    var w = "input, textarea, button"; // elements consider off limits if in focus
+
+    var dX = 150; // minimum pixels of horizontal movement
+    var dY = 0.6; // ration of vertical:horizontal movement limit
 
     $(document).ready(function() {
         $(t).bind("click", function(e) {
@@ -61,6 +65,12 @@ $(function() {
                 $(s).removeClass(c);
                 $(i).blur();
             }
+
+            if (code === 13 && !$(document.activeElement).is(w) && !$(s).hasClass(c)) { // enter key
+                e.preventDefault();
+                $(s).addClass(c);
+                $(i).focus();
+            }
         });
 
         var x = null;
@@ -69,30 +79,85 @@ $(function() {
         var b = null;
 
         $(document).bind("touchstart", function(e) {
-            if (!$(s).hasClass(c)) return;
-
             x = e.originalEvent.touches[0].pageX;
             y = e.originalEvent.touches[0].pageY;
         });
 
         $(document).bind("touchmove", function(e) {
-            if (!$(s).hasClass(c)) return;
-
             a = e.originalEvent.touches[0].pageX;
             b = e.originalEvent.touches[0].pageY;
         });
 
         $(document).bind("touchend", function(e) {
-            if (!$(s).hasClass(c)) return;
-
             var w = $(window).width();
             var h = $(window).height();
 
-            // swiped left more than 80% of viewport width and less than 60% of height
-            if (x - a > w * 0.5 && Math.abs(y - b) < h * 0.6) {
+            // swiped more than dX pixels horizontaly and ratio vertical:horizontal is less than dY
+            if (x - a > 0 && Math.abs(x - a) > dX && Math.abs(b - y) / Math.abs(a - x) < dY) {
                 $(s).removeClass(c);
                 $(i).blur();
+            } else if (x - a < 0 && Math.abs(x - a) > dX && Math.abs(b - y) / Math.abs(a - x) < dY) {
+                $(s).addClass(c);
+                $(i).focus();
             }
+
+            x = null;
+            y = null;
+            a = null;
+            b = null;
         })
+    });
+});
+
+/**
+ * Sticky elements
+ * TODO: scroll debounce due to large page scrolling smoothness
+ */
+$(function() {
+    var sticky = "[sticky]";
+    var $elements = [];
+
+    $(document).ready(function() {
+        $elements = $(sticky, "main");
+
+        $elements.each(function(i, e) {
+            $(e).parent().css("position", "relative");
+        });
+    });
+
+    $("main").on("scroll", function() {
+        if ($elements.length < 1) return;
+
+        $elements.each(function(i, e) {
+            if ($(e).parent().offset().top > 0) {
+                if ($(e).prev().hasClass("stickyholder")) {
+                    $(e).prev().remove();
+                }
+
+                $(e)
+                .css("position", "")
+                .removeClass("stuck");
+            } else if ($(e).outerHeight() > $(e).parent().offset().top + $(e).parent().outerHeight()) {
+                $(e)
+                .css({
+                    "position": "absolute",
+                    "top": "",
+                    "bottom": 0
+                })
+                .removeClass("stuck");
+            } else if ($(e).parent().offset().top < 0) {
+                if (!$(e).prev().hasClass("stickyholder")) {
+                    $('<div class="stickyholder"></div>').insertBefore(e).outerHeight($(e).outerHeight());
+                }
+
+                $(e)
+                .css({
+                    "position": "fixed",
+                    "top": 0,
+                    "bottom": ""
+                })
+                .addClass("stuck");
+            }
+        });
     });
 });

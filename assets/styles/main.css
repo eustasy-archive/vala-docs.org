@@ -28,19 +28,42 @@ body {
     font-weight: 400;
 }
 
-h2,
-h3 {
-    font-family: "Droid Serif", serif;
+h1 {
+    border-bottom: 1px solid #dedede;
+    font-size: 32px;
+    font-weight: 200;
+}
+
+h2 {
+    font-size: 28px;
     font-weight: 300;
+}
+
+h3 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+h4 {
+    font-size: 20px;
+    font-weight: 600;
 }
 
 p {
     font-size: 14px;
+    padding: 10px 0;
+    line-height: 1.6em;
+    max-width: 65ch;
 }
 
-/**
- * Elements
- */
+a {
+    color: #08c;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
 
 /**
  * Page layout
@@ -55,27 +78,38 @@ nav.sidebar {
     background-color: #fcfcfc;
     border-right: 1px solid #dedede;
     color: #666;
-    display: flex;
+    display: block;
     flex-direction: column;
-    flex: 0.15 1 auto;
+    flex: 0.15 0 auto;
     height: 100vh;
     left: -100%;
     max-width: 75vw;
+    overflow-y: auto;
     position: absolute;
-    top: 0;
     right: 0;
+    top: 0;
     transition: left 200ms ease;
+    z-index: 9001;
 }
 
 nav.sidebar.active {
     left: 0;
 }
 
+nav.sidebar > a[href="/"] {
+    align-items: center;
+    background-color: #403757;
+    display: none;
+    flex: 0 0 auto;
+    height: 64px;
+    justify-content: center;
+}
+
 nav.sidebar > div.search > input[type="text"] {
     border: none;
     border-bottom: 1px solid #dedede;
     font-size: 14px;
-    height: 58px;
+    height: 64px;
     outline: none;
     padding: 20px;
     transition: background 100ms ease;
@@ -109,7 +143,22 @@ nav.sidebar > ul ul:last-of-type {
 }
 
 nav.sidebar > ul li {
-    padding: 12px 20px;
+    align-items: center;
+    display: inline-flex;
+    padding: 8px 12px;
+}
+
+nav.sidebar > ul li::before {
+    background-position: 50%;
+    background-repeat: no-repeat;
+    content: "";
+    height: 16px;
+    margin-right: 12px;
+    width: 16px;
+}
+
+nav.sidebar > ul li.package::before {
+    background-image: url("/assets/images/icons/package.svg");
 }
 
 nav.sidebar > ul a {
@@ -128,79 +177,50 @@ main {
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
-main > div.content {
-    flex: 1 1 auto;
-    padding: 10px;
-}
-
-header {
+main > header {
+    align-items: center;
     background-color: #403757;
     color: #fff;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    flex: 0 0 auto;
-    font-size: 14px;
-    height: 58px;
-    overflow: hidden;
-    text-align: center;
-}
-
-header * {
-    display: flex;
-}
-
-header a {
-    color: inherit;
-    text-decoration: none;
-}
-
-header > div {
-    align-items: center;
-    flex-wrap: wrap;
-    flex: 9001 0 192px;
-    height: 100%;
-    min-width: 192px;
-    overflow: hidden;
-}
-
-header > div > div {
-    align-items: center;
-    cursor: pointer;
     flex: 0 0 auto;
     font-size: 18px;
-    height: 58px;
+    height: 64px;
     justify-content: center;
-    text-rendering: geometricPrecision;
-    width: 58px;
 }
 
-header > div > div:hover {
-    background-color: rgba(95, 82, 128, 0.6);
-}
-
-header > div > div:active {
-    background-color: rgba(38, 33, 51, 0.8);
-}
-
-header > div > a {
-    flex: 1 0 auto;
-    height: 42px;
+main > header,
+main > header * {
+    display: flex;
+    align-items: center;
     justify-content: center;
-    padding: 0 12px;
+    height: 64px;
 }
 
-header > div > span {
-    align-items: flex-end;
-    flex: 9001 1 auto;
-    height: 34px;
-    margin: 10px;
+main > header > div {
+    cursor: pointer;
+    height: 64px;
+    width: 64px;
 }
 
-footer {
+main > header > div:hover,
+main > header > div:active {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+main > header > a {
+    flex: 1 1 auto;
+}
+
+main > section.content {
+    flex: 1 1 auto;
+    box-sizing: content-box;
+}
+
+main > footer {
     background-color: #fefefe;
     border-top: 1px solid #eee;
     display: flex;
@@ -209,22 +229,22 @@ footer {
     justify-content: space-between;
 }
 
-footer * {
+main > footer * {
     display: flex;
 }
 
-footer span {
+main > footer span {
     padding: 10px;
 }
 
-footer ul {
+main > footer ul {
     align-content: stretch;
     align-items: stretch;
     flex-wrap: wrap;
     justify-content: center;
 }
 
-footer a {
+main > footer a {
     align-items: center;
     color: inherit;
     padding: 10px;
@@ -232,8 +252,8 @@ footer a {
     transition: background 50ms ease;
 }
 
-footer a:hover,
-footer a:active {
+main > footer a:hover,
+main > footer a:active {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
@@ -242,13 +262,94 @@ footer a:active {
         position: static;
     }
 
-    header > div > .sidebar-menu {
+    nav.sidebar > a[href="/"] {
+        display: flex;
+    }
+
+    main > header {
         display: none;
     }
 }
 
-@media (min-height: 650px) {
+@media (min-height: 400px) {
+    nav.sidebar {
+        display: flex;
+    }
+}
+
+@media (min-height: 750px) {
     nav.sidebar > ul {
         display: flex;
     }
+}
+
+/**
+ * Page elements
+ */
+section.content .wrapper {
+    margin: 10px 20px;
+}
+
+section.content h1 {
+    padding: 12px 20px;
+    min-height: 64px;
+}
+
+section.content h4 {
+    padding: 10px 20px;
+}
+
+section.content ul {
+    padding: 6px 30px;
+}
+
+section.content ul li {
+    padding: 4px 0;
+    list-style: none;
+}
+
+section.content ul li > span {
+    display: block;
+    padding: 4px 0 0 10px;
+}
+
+section.content .btn {
+    margin: 10px;
+    padding: 16px 32px;
+    background: linear-gradient(to bottom, #534870 0%, #443b5c 100%);
+    color: #fff;
+    text-shadow: 0 1px #2f2740;
+    box-shadow: inset 0 0 0 1px rgba(47, 41, 64, 0.3);
+    border-radius: 3px;
+    text-decoration: none;
+}
+
+/**
+ * Javascript related things
+ */
+main [sticky] {
+    background-color: #fff;
+    width: 100%;
+    transition: border-color 150ms ease;
+    border-bottom: 1px solid transparent;
+}
+
+main [sticky].stuck {
+    border-color: #dedede;
+}
+
+/**
+ * Error page
+ */
+section.content[id$="error"] {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+section.content[id$="error"] img {
+    width: 96px;
+    height: 96px;
+    padding: 16px;
 }
