@@ -126,29 +126,15 @@ $(function() {
                     $(e).prev().remove();
                 }
 
-                $(e)
-                .css("position", "")
-                .removeClass("stuck");
+                $(e).removeClass("sticky--after sticky--stuck").addClass("sticky--before");
             } else if ($(e).outerHeight() > $(e).parent().offset().top + $(e).parent().outerHeight()) {
-                $(e)
-                .css({
-                    "position": "absolute",
-                    "top": "",
-                    "bottom": 0
-                })
-                .removeClass("stuck");
+                $(e).removeClass("sticky--before sticky--stuck").addClass("sticky--after");
             } else if ($(e).parent().offset().top < 0) {
                 if (!$(e).prev().hasClass("stickyholder")) {
                     $('<div class="stickyholder"></div>').insertBefore(e).outerHeight($(e).outerHeight());
                 }
 
-                $(e)
-                .css({
-                    "position": "fixed",
-                    "top": 0,
-                    "bottom": ""
-                })
-                .addClass("stuck");
+                $(e).removeClass("sticky--after sticky--before").addClass("sticky--stuck");
             }
         });
     });

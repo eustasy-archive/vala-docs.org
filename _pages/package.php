@@ -13,10 +13,12 @@
 
 <?php
     require_once __DIR__."/../_templates/sitewide.php";
-    require_once __DIR__."/../_functions/docs/list.php";
 
     $page["sidebar"][] = ['<a href="#"><li class="package">'.$pkg.'</li></a>'];
-    $page["sidebar"][] = ['<a href="#"><li class="method">thing</li></a>'];
+    $page["sidebar"][] = [
+        '<a href="#"><li class="namespace">thing</li></a>',
+        '<a href="#"><li class="namespace">thing</li></a>'
+    ];
 
     include $templates["header"];
 ?>

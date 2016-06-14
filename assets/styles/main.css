@@ -334,8 +334,19 @@ main [sticky] {
     border-bottom: 1px solid transparent;
 }
 
-main [sticky].stuck {
+main [sticky].sticky--before {
+    position: relative;
+}
+
+main [sticky].sticky--stuck {
     border-color: #dedede;
+    position: fixed;
+    top: 0;
+}
+
+main [sticky].sticky--after {
+    position: absolute;
+    bottom: 0;
 }
 
 /**
