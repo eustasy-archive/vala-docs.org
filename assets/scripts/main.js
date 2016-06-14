@@ -6,7 +6,7 @@
 /**
  * JS toggle logic
  */
-$(function() {
+$(function () {
     var activeClass = "active";
 
     $("[js-toggle]").bind("click", function() {
@@ -107,35 +107,62 @@ $(function() {
 
 /**
  * Sticky elements
- * TODO: scroll debounce due to large page scrolling smoothness
  */
 $(function() {
-    var sticky = "[sticky]";
+    var sticky = ".sticky";
     var $elements = $(sticky, "main");
 
-    $elements.each(function(i, e) {
-        $(e).parent().css("position", "relative");
-    });
+    var debounceTimer = null;
+
+    for (var i = 0; i < $elements.length; i++) {
+        $($elements[i]).parent().css("position", "relative");
+    }
+
+    var calculate = function() {
+        debounceTimer = null;
+
+        for (var i = 0; i < $elements.length; i++) {
+            var $element = $($elements[i]);
+            var $parent = $element.parent();
+            var $previous = $element.prev();
+
+            var height = $element.outerHeight();
+
+            if ($previous != null && $previous.hasClass("stickyholder")) {
+                var offset = $previous.offset().top;
+            } else {
+                var offset = $element.offset().top;
+            }
+
+            if (offset > 0) {
+                if ($previous.hasClass("stickyholder")) {
+                    $previous.remove();
+                }
+
+                $element.removeClass("sticky--after sticky--stuck").addClass("sticky--before");
+            } else if (height > offset + $parent.outerHeight()) {
+                $element.removeClass("sticky--before sticky--stuck").addClass("sticky--after");
+            } else if (offset < 0) {
+                if (!$previous.hasClass("stickyholder")) {
+                    $('<div class="stickyholder"></div>').insertBefore($element).outerHeight(height);
+                }
+
+                $element.removeClass("sticky--after sticky--before").addClass("sticky--stuck");
+            }
+        }
+    }
 
     $("main").on("scroll", function() {
         if ($elements.length < 1) return;
 
-        $elements.each(function(i, e) {
-            if ($(e).parent().offset().top > 0) {
-                if ($(e).prev().hasClass("stickyholder")) {
-                    $(e).prev().remove();
-                }
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(calculate, 50);
+    })
 
-                $(e).removeClass("sticky--after sticky--stuck").addClass("sticky--before");
-            } else if ($(e).outerHeight() > $(e).parent().offset().top + $(e).parent().outerHeight()) {
-                $(e).removeClass("sticky--before sticky--stuck").addClass("sticky--after");
-            } else if ($(e).parent().offset().top < 0) {
-                if (!$(e).prev().hasClass("stickyholder")) {
-                    $('<div class="stickyholder"></div>').insertBefore(e).outerHeight($(e).outerHeight());
-                }
+    $(window).on("resize", function() {
+        if ($elements.length < 1) return;
 
-                $(e).removeClass("sticky--after sticky--before").addClass("sticky--stuck");
-            }
-        });
-    });
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(calculate, 50);
+    })
 });

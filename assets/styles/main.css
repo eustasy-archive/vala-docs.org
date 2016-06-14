@@ -327,26 +327,26 @@ section.content .btn {
 /**
  * Javascript related things
  */
-main [sticky] {
+main .sticky {
     background-color: #fff;
-    width: 100%;
-    transition: border-color 150ms ease;
     border-bottom: 1px solid transparent;
+    transition: border-color 150ms ease;
+    width: 100%;
 }
 
-main [sticky].sticky--before {
+main .sticky.sticky--before {
     position: relative;
 }
 
-main [sticky].sticky--stuck {
+main .sticky.sticky--stuck {
     border-color: #dedede;
     position: fixed;
     top: 0;
 }
 
-main [sticky].sticky--after {
-    position: absolute;
+main .sticky.sticky--after {
     bottom: 0;
+    position: absolute;
 }
 
 /**

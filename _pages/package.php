@@ -29,7 +29,7 @@
         <p>ATK provides the set of accessibility interfaces that are implemented by other toolkits and applications. Using the ATK interfaces, accessibility tools have full access to view and control running applications.</p>
     </div>
     <div>
-        <h4 sticky>Interfaces</h4>
+        <h4 class="sticky">Interfaces</h4>
         <ul class="wrapper" id="interface">
             <li>
                 <a href="#">Action</a>
@@ -94,7 +94,7 @@
         </ul>
     </div>
     <div>
-        <h4 sticky>Classes</h4>
+        <h4 class="sticky">Classes</h4>
         <ul class="wrapper" id="class">
             <li>
                 <a href="#">AttributeSet</a>
