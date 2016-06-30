@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package name="gstreamer-controller-1.0">
+ <namespace id="Gst" name="Gst" deprecated="false" visibility="public">
+  <members>
+   <namespace id="Gst.Controller" name="Controller" deprecated="false" visibility="public">
+    <members>
+     <class id="Gst.Controller.ARGBControlBinding" name="ARGBControlBinding" deprecated="false" visibility="public" abstract="false" compact="false" fundamental="false">
+      <parents>
+       <base_type>Gst.ControlBinding</base_type>
+      </parents>
+      <members>
+       <constructor id="Gst.Controller.ARGBControlBinding.ARGBControlBinding" name="ARGBControlBinding" deprecated="false" visibility="public" abstract="false" dbus_visible="true" inline="false" override="false" static="false" virtual="false" yields="false"/>
+       <property id="Gst.Controller.ARGBControlBinding.control_source_a" name="control_source_a" deprecated="false" visibility="public" abstract="false" dbus_visible="true" override="false" virtual="false" getter_visibility="public" getter_get="true" setter_visibility="public" setter_set="true" setter_construct="true">
+        <attributes>
+         <attribute>NoAccessorMethod</attribute>
+        </attributes>
+       </property>
+       <property id="Gst.Controller.ARGBControlBinding.control_source_b" name="control_source_b" deprecated="false" visibility="public" abstract="false" dbus_visible="true" override="false" virtual="false" getter_visibility="public" getter_get="true" setter_visibility="public" setter_set="true" setter_construct="true">
+        <attributes>
+         <attribute>NoAccessorMethod</attribute>
+        </attributes>
+       </property>
+       <property id="Gst.Controller.ARGBControlBinding.control_source_g" name="control_source_g" deprecated="false" visibility="public" abstract="false" dbus_visible="true" override="false" virtual="false" getter_visibility="public" getter_get="true" setter_visibility="public" setter_set="true" setter_construct="true">
+        <attributes>
+         <attribute>NoAccessorMethod</attribute>
+        </attributes>
+       </property>
+       <property id="Gst.Controller.ARGBControlBinding.control_source_r" name="control_source_r" deprecated="false" visibility="public" abstract="false" dbus_visible="true" override="false" virtual="false" getter_visibility="public" getter_get="true" setter_visibility="public" setter_set="true" setter_construct="true">
+        <attributes>
+         <attribute>NoAccessorMethod</attribute>
+        </attributes>
+       </property>
+      </members>
+     </class>
+     <class id="Gst.Controller.ControlPoint" name="ControlPoint" deprecated="false" visibility="public" abstract="false" compact="true" fundamental="false">
+      <attributes>
+       <attribute>Compact</attribute>
+      </attributes>
+      <members>
+       <field id="Gst.Controller.ControlPoint.cache_cubic_h" name="cache_cubic_h" deprecated="false" visibility="public" static="false" volatile="false"/>
+       <field id="Gst.Controller.ControlPoint.cache_cubic_monotonic_c1s" name="cache_cubic_monotonic_c1s" deprecated="false" visibility="public" static="false" volatile="false"/>
+       <field id="Gst.Controller.ControlPoint.cache_cubic_monotonic_c2s" name="cache_cubic_monotonic_c2s" deprecated="false" visibility="public" static="false" volatile="false"/>
+       <field id="Gst.Controller.ControlPoint.cache_cubic_monotonic_c3s" name="cache_cubic_monotonic_c3s" deprecated="false" visibility="public" static="false" volatile="false"/>
+       <field id="Gst.Controller.ControlPoint.cache_cubic_z" name="cache_cubic_z" deprecated="false" visibility="public" static="false" volatile="false"/>
+       <field id="Gst.Controller.ControlPoint.timestamp" name="timestamp" deprecated="false" visibility="public" static="false" volatile="false"/>
+       <field id="Gst.Controller.ControlPoint.value" name="value" deprecated="false" visibility="public" static="false" volatile="false"/>
+      </members>
+     </class>
+     <class id="Gst.Controller.DirectControlBinding" name="DirectControlBinding" deprecated="false" visibility="public" abstract="false" compact="false" fundamental="false">
+      <parents>
+       <base_type>Gst.ControlBinding</base_type>
+      </parents>
+      <members>
+       <constructor id="Gst.Controller.DirectControlBinding.DirectControlBinding" name="DirectControlBinding" deprecated="false" visibility="public" abstract="false" dbus_visible="true" inline="false" override="false" static="false" virtual="false" yields="false"/>
+       <constructor id="Gst.Controller.DirectControlBinding.DirectControlBinding.with_absolute" name="DirectControlBinding.with_absolute" deprecated="false" visibility="public" abstract="false" dbus_visible="true" inline="false" override="false" static="false" virtual="false" yields="false"/>
+       <property id="Gst.Controller.DirectControlBinding.absolute" name="absolute" deprecated="false" visibility="public" abstract="false" dbus_visible="true" override="false" virtual="false" getter_visibility="public" getter_get="true" setter_visibility="public" setter_set="false" setter_construct="true">
+        <attributes>
+         <attribute>NoAccessorMethod</attribute>
+        </attributes>
+       </property>
+       <property id="Gst.Controller.DirectControlBinding.control_source" name="control_source" deprecated="false" visibility="public" abstract="false" dbus_visible="true" override="false" virtual="false" getter_visibility="public" getter_get="true" setter_visibility="public" setter_set="true" setter_construct="true">
+        <attributes>
+         <attribute>NoAccessorMethod</attribute>
+        </attributes>
+       </property>
+       <field id="Gst.Controller.DirectControlBinding.ABI_abi_want_absolute" name="ABI_abi_want_absolute" deprecated="false" visibility="public" static="false" volatile="false"/>
+      </members>
+     </class>
+     <class id="Gst.Controller.InterpolationControlSource" name="InterpolationControlSource" deprecated="false" visibility="public" abstract="false" compact="false" fundamental="false">
+      <parents>
+       <base_type>Gst.Controller.TimedValueControlSource</base_type>
+      </parents>
+      <members>
+       <constructor id="Gst.Controller.InterpolationControlSource.InterpolationControlSource" name="InterpolationControlSource" deprecated="false" visibility="public" abstract="false" dbus_visible="true" inline="false" override="false" static="false" virtual="false" yields="false"/>
+       <property id="Gst.Controller.InterpolationControlSource.mode" name="mode" deprecated="false" visibility="public" abstract="false" dbus_visible="true" override="false" virtual="false" getter_visibility="public" getter_get="true" setter_visibility="public" setter_set="true" setter_construct="false">
+        <attributes>
+         <attribute>NoAccessorMethod</attribute>
+        </attributes>
+       </property>
+      </members>
+     </class>
+     <class id="Gst.Controller.LFOControlSource" name="LFOControlSource" deprecated="false" visibility="public" abstract="false" compact="false" fundamental="false">
+      <parents>
+       <base_type>Gst.ControlSource</base_type>
+      </parents>
+      <members>
+       <constructor id="Gst.Controller.LFOControlSource.LFOControlSource" name="LFOControlSource" deprecated="false" visibility="public" abstract="false" dbus_visible="true" inline="false" override="false" static="false" virtual="false" yields="false"/>
+       <property id="Gst.Controller.LFOControlSource.amplitude" name="amplitude" deprecated="false" visibility="public" abstract="false" dbus_visible="true" override="false" virtual="false" getter_visibility="public" getter_get="true" setter_visibility="public" setter_set="true" setter_construct="false">
+        <attributes>
+         <attribute>NoAccessorMethod</attribute>
+        </attributes>
+       </property>
+       <property id="Gst.Controller.LFOControlSource.frequency" name="frequency" deprecated="false" visibility="public" abstract="false" dbus_visible="true" override="false" virtual="false" getter_visibility="public" getter_get="true" setter_visibility="public" setter_set="true" setter_construct="false">
+        <attributes>
+         <attribute>NoAccessorMethod</attribute>
+        </attributes>
+       </property>
+       <property id="Gst.Controller.LFOControlSource.offset" name="offset" deprecated="false" visibility="public" abstract="false" dbus_visible="true" override="false" virtual="false" getter_visibility="public" getter_get="true" setter_visibility="public" setter_set="true" setter_construct="false">
+        <attributes>
+         <attribute>NoAccessorMethod</attribute>
+        </attributes>
+       </property>
+       <property id="Gst.Controller.LFOControlSource.timeshift" name="timeshift" deprecated="false" visibility="public" abstract="false" dbus_visible="true" override="false" virtual="false" getter_visibility="public" getter_get="true" setter_visibility="public" setter_set="true" setter_construct="false">
+        <attributes>
+         <attribute>NoAccessorMethod</attribute>
+        </attributes>
+       </property>
+       <property id="Gst.Controller.LFOControlSource.waveform" name="waveform" deprecated="false" visibility="public" abstract="false" dbus_visible="true" override="false" virtual="false" getter_visibility="public" getter_get="true" setter_visibility="public" setter_set="true" setter_construct="false">
+        <attributes>
+         <attribute>NoAccessorMethod</attribute>
+        </attributes>
+       </property>
+      </members>
+     </class>
+     <class id="Gst.Controller.TimedValueControlSource" name="TimedValueControlSource" deprecated="false" visibility="public" abstract="true" compact="false" fundamental="false">
+      <parents>
+       <base_type>Gst.ControlSource</base_type>
+      </parents>
+      <members>
+       <method id="Gst.Controller.TimedValueControlSource.find_control_point_iter" name="find_control_point_iter" deprecated="false" visibility="public" abstract="false" dbus_visible="true" inline="false" override="false" static="false" virtual="false" yields="false" return_type="GLib.SequenceIter" returns_array="false"/>
+       <method id="Gst.Controller.TimedValueControlSource.get_all" name="get_all" deprecated="false" visibility="public" abstract="false" dbus_visible="true" inline="false" override="false" static="false" virtual="false" yields="false" return_type="GLib.List" returns_array="false"/>
+       <method id="Gst.Controller.TimedValueControlSource.get_count" name="get_count" deprecated="false" visibility="public" abstract="false" dbus_visible="true" inline="false" override="false" static="false" virtual="false" yields="false" return_type="int" returns_array="false"/>
+       <method id="Gst.Controller.TimedValueControlSource.@set" name="@set" deprecated="false" visibility="public" abstract="false" dbus_visible="true" inline="false" override="false" static="false" virtual="false" yields="false" return_type="bool" returns_array="false"/>
+       <method id="Gst.Controller.TimedValueControlSource.set_from_list" name="set_from_list" deprecated="false" visibility="public" abstract="false" dbus_visible="true" inline="false" override="false" static="false" virtual="false" yields="false" return_type="bool" returns_array="false"/>
+       <method id="Gst.Controller.TimedValueControlSource.unset" name="unset" deprecated="false" visibility="public" abstract="false" dbus_visible="true" inline="false" override="false" static="false" virtual="false" yields="false" return_type="bool" returns_array="false"/>
+       <method id="Gst.Controller.TimedValueControlSource.unset_all" name="unset_all" deprecated="false" visibility="public" abstract="false" dbus_visible="true" inline="false" override="false" static="false" virtual="false" yields="false"/>
+       <constructor id="Gst.Controller.TimedValueControlSource.TimedValueControlSource" name="TimedValueControlSource" deprecated="false" visibility="protected" abstract="false" dbus_visible="true" inline="false" override="false" static="false" virtual="false" yields="false"/>
+       <signal id="Gst.Controller.TimedValueControlSource.value_added" name="value_added" deprecated="false" visibility="public" dbus_visible="true" virtual="false"/>
+       <signal id="Gst.Controller.TimedValueControlSource.value_changed" name="value_changed" deprecated="false" visibility="public" dbus_visible="true" virtual="false"/>
+       <signal id="Gst.Controller.TimedValueControlSource.value_removed" name="value_removed" deprecated="false" visibility="public" dbus_visible="true" virtual="false"/>
+       <field id="Gst.Controller.TimedValueControlSource.@lock" name="@lock" deprecated="false" visibility="public" static="false" volatile="false"/>
+       <field id="Gst.Controller.TimedValueControlSource.nvalues" name="nvalues" deprecated="false" visibility="public" static="false" volatile="false"/>
+       <field id="Gst.Controller.TimedValueControlSource.valid_cache" name="valid_cache" deprecated="false" visibility="public" static="false" volatile="false"/>
+       <field id="Gst.Controller.TimedValueControlSource.values" name="values" deprecated="false" visibility="public" static="false" volatile="false"/>
+      </members>
+     </class>
+     <class id="Gst.Controller.TriggerControlSource" name="TriggerControlSource" deprecated="false" visibility="public" abstract="false" compact="false" fundamental="false">
+      <parents>
+       <base_type>Gst.Controller.TimedValueControlSource</base_type>
+      </parents>
+      <members>
+       <constructor id="Gst.Controller.TriggerControlSource.TriggerControlSource" name="TriggerControlSource" deprecated="false" visibility="public" abstract="false" dbus_visible="true" inline="false" override="false" static="false" virtual="false" yields="false"/>
+       <property id="Gst.Controller.TriggerControlSource.tolerance" name="tolerance" deprecated="false" visibility="public" abstract="false" dbus_visible="true" override="false" virtual="false" getter_visibility="public" getter_get="true" setter_visibility="public" setter_set="true" setter_construct="false">
+        <attributes>
+         <attribute>NoAccessorMethod</attribute>
+        </attributes>
+       </property>
+      </members>
+     </class>
+     <method id="Gst.Controller.timed_value_control_invalidate_cache" name="timed_value_control_invalidate_cache" deprecated="false" visibility="public" abstract="false" dbus_visible="true" inline="false" override="false" static="false" virtual="false" yields="false"/>
+     <delegate id="Gst.Controller.DirectControlBindingConvertGValue" name="DirectControlBindingConvertGValue" deprecated="false" visibility="public" static="true">
+      <attributes>
+       <attribute>CCode</attribute>
+      </attributes>
+     </delegate>
+     <delegate id="Gst.Controller.DirectControlBindingConvertValue" name="DirectControlBindingConvertValue" deprecated="false" visibility="public" static="true">
+      <attributes>
+       <attribute>CCode</attribute>
+      </attributes>
+     </delegate>
+     <enum id="Gst.Controller.InterpolationMode" name="InterpolationMode" deprecated="false" visibility="public">
+      <members>
+       <enum_value id="Gst.Controller.InterpolationMode.NONE" name="NONE" deprecated="false" visibility="public"/>
+       <enum_value id="Gst.Controller.InterpolationMode.LINEAR" name="LINEAR" deprecated="false" visibility="public"/>
+       <enum_value id="Gst.Controller.InterpolationMode.CUBIC" name="CUBIC" deprecated="false" visibility="public"/>
+       <enum_value id="Gst.Controller.InterpolationMode.CUBIC_MONOTONIC" name="CUBIC_MONOTONIC" deprecated="false" visibility="public"/>
+      </members>
+     </enum>
+     <enum id="Gst.Controller.LFOWaveform" name="LFOWaveform" deprecated="false" visibility="public">
+      <members>
+       <enum_value id="Gst.Controller.LFOWaveform.SINE" name="SINE" deprecated="false" visibility="public"/>
+       <enum_value id="Gst.Controller.LFOWaveform.SQUARE" name="SQUARE" deprecated="false" visibility="public"/>
+       <enum_value id="Gst.Controller.LFOWaveform.SAW" name="SAW" deprecated="false" visibility="public"/>
+       <enum_value id="Gst.Controller.LFOWaveform.REVERSE_SAW" name="REVERSE_SAW" deprecated="false" visibility="public"/>
+       <enum_value id="Gst.Controller.LFOWaveform.TRIANGLE" name="TRIANGLE" deprecated="false" visibility="public"/>
+      </members>
+     </enum>
+    </members>
+   </namespace>
+  </members>
+ </namespace>
+</package>
