@@ -29,7 +29,8 @@ $stats = [
 	"namespaces" => 0,
 	"classes" => 0,
 	"methods" => 0,
-	"properties" => 0
+	"properties" => 0,
+	"signals" => 0
 ];
 
 //
@@ -159,6 +160,37 @@ function build_property(SimpleXMLElement $node, $package) {
 	if ($r) $stats["properties"] += 1;
 }
 
+function build_signal(SimpleXMLElement $node, $package) {
+	global $args;
+	global $stats;
+
+	$attr = $node->attributes();
+	$id = $attr->id;
+
+	$obj = [
+		"id" => $id,
+		"name" => $attr->name,
+		"package" => $package,
+		"deprecated" => $attr->deprecated,
+		"visibility" => $attr->visibility,
+		"dbus_visible" => $attr->dbus_visible,
+		"virtual" => $attr->virtual,
+		"attributes" => []
+	];
+
+	if (isset($node->attributes) || array_key_exists("attributes", $node)) {
+	 	foreach ($node->attributes[0] as $tag => $value) {
+			$obj["attributes"][] = $value;
+		}
+  	}
+
+	$obj["attributes"] = "{".implode(", ", $obj["attributes"])."}";
+
+	$r = database_create('signals', $obj);
+	if (!$r && $args["verbose"]) printf("Unable to create $id signal.\n");
+	if ($r) $stats["signals"] += 1;
+}
+
 //
 // Director function for iterating over the unknown
 //
@@ -180,6 +212,12 @@ function build_next(SimpleXMLElement $node, $package) {
 	if (isset($node->members->property) || array_key_exists("property", $node->members)) {
 		foreach ($node->members->property as $property) {
 			build_property($property, $package);
+		}
+	}
+
+	if (isset($node->members->signal) || array_key_exists("signal", $node->members)) {
+		foreach ($node->members->signal as $signal) {
+			build_signal($signal, $package);
 		}
 	}
 }

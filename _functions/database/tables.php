@@ -64,3 +64,14 @@ $database["tables"]["properties"] = [
 	"setter_construct" => "boolean DEFAULT false",
 	"attributes" => "varchar(128)[]"
 ];
+
+$database["tables"]["signals"] = [
+	"id" => "varchar(128) NOT NULL PRIMARY KEY",
+	"name" => "varchar(50) NOT NULL",
+	"package" => "varchar(128) NOT NULL",
+	"deprecated" => "boolean DEFAULT false",
+	"visibility" => "varchar(9) DEFAULT 'public'",
+	"dbus_visible" => "boolean DEFAULT true",
+	"virtual" => "boolean DEFAULT false",
+	"attributes" => "varchar(128)[]"
+];
