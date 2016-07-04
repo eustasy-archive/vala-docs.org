@@ -29,7 +29,7 @@ $database["tables"]["classes"] = [
 	"attributes" => "varchar(128)[]"
 ];
 
-$database["tables"]["methods"] =[
+$database["tables"]["methods"] = [
 	"id" => "varchar(128) NOT NULL PRIMARY KEY",
 	"name" => "varchar(50) NOT NULL",
 	"package" => "varchar(128) NOT NULL",
@@ -44,5 +44,23 @@ $database["tables"]["methods"] =[
 	"yields" => "boolean DEFAULT false",
 	"return_type" => "varchar(128)",
 	"returns_array" => "boolean DEFAULT false",
+	"attributes" => "varchar(128)[]"
+];
+
+$database["tables"]["properties"] = [
+	"id" => "varchar(128) NOT NULL PRIMARY KEY",
+	"name" => "varchar(50) NOT NULL",
+	"package" => "varchar(128) NOT NULL",
+	"deprecated" => "boolean DEFAULT false",
+	"visibility" => "varchar(9) DEFAULT 'public'",
+	"abstract" => "boolean DEFAULT false",
+	"dbus_visible" => "boolean DEFAULT true",
+	"override" => "boolean DEFAULT false",
+	"virtual" => "boolean DEFAULT false",
+	"getter_visibility" => "varchar(9) DEFAULT 'public'",
+	"getter_get" => "boolean DEFAULT true",
+	"setter_visibility" => "varchar(9) DEFAULT 'public'",
+	"setter_set" => "boolean DEFAULT true",
+	"setter_construct" => "boolean DEFAULT false",
 	"attributes" => "varchar(128)[]"
 ];
