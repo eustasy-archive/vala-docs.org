@@ -27,7 +27,8 @@ database_setup();
 $stats = [
 	"packages" => 0,
 	"namespaces" => 0,
-	"classes" => 0
+	"classes" => 0,
+	"methods" => 0
 ];
 
 //
@@ -81,6 +82,44 @@ function build_class(SimpleXMLElement $node, $package) {
 	build_next($node, $package);
 }
 
+function build_method(SimpleXMLElement $node, $package) {
+	global $args;
+	global $stats;
+
+	$attr = $node->attributes();
+	$id = $attr->id;
+
+	$obj = [
+		"id" => $id,
+		"name" => $attr->name,
+		"package" => $package,
+		"deprecated" => $attr->deprecated,
+		"visibility" => $attr->visibility,
+		"abstract" => $attr->abstract,
+		"dbus_visible" => $attr->dbus_visible,
+		"inline" => $attr->inline,
+		"override" => $attr->override,
+		"static" => $attr->static,
+		"virtual" => $attr->virtual,
+		"yields" => $attr->yields,
+		"return_type" => $attr->return_type,
+		"returns_array" => $attr->returns_array,
+		"attributes" => []
+	];
+
+	if (isset($node->attributes) || array_key_exists("attributes", $node)) {
+	 	foreach ($node->attributes[0] as $tag => $value) {
+			$obj["attributes"][] = $value;
+		}
+  	}
+
+	$obj["attributes"] = "{".implode(", ", $obj["attributes"])."}";
+
+	$r = database_create('methods', $obj);
+	if (!$r && $args["verbose"]) printf("Unable to create $id method.\n");
+	if ($r) $stats["methods"] += 1;
+}
+
 //
 // Director function for iterating over the unknown
 //
@@ -90,6 +129,12 @@ function build_next(SimpleXMLElement $node, $package) {
 	if (isset($node->members->class) || array_key_exists("class", $node->members)) {
 		foreach ($node->members->class as $class) {
 			build_class($class, $package);
+		}
+	}
+
+	if (isset($node->members->method) || array_key_exists("method", $node->members)) {
+		foreach ($node->members->method as $method) {
+			build_method($method, $package);
 		}
 	}
 }
