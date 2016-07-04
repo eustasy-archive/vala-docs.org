@@ -1,7 +1,7 @@
 <?php
 
-    if (!isset($settings)) $settings = [];
-    if (!isset($settings["docs"])) $settings["docs"] = [];
+if (!isset($settings)) $settings = [];
+if (!isset($settings["docs"])) $settings["docs"] = [];
 
-    $settings["docs"]["directory"] = __DIR__."/../doc-gen/docs";
-    $settings["docs"]["blacklist"] = [];
+$settings["docs"]["directory"] = __DIR__."/../doc-gen/docs";
+$settings["docs"]["blacklist"] = [];

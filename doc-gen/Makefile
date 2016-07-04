@@ -17,9 +17,7 @@ libdoclet.so: JsonDoclet.vala
 
 update-girs:
 	if test -d girs; then \
-		cd girs ; \
-		git pull ; \
-		cd .. ; \
+		git -C girs pull ; \
 	else \
 		git clone https://github.com/nemequ/vala-girs.git girs ; \
 	fi

@@ -1,0 +1,290 @@
+<?php
+
+require_once __DIR__."/../_settings/docs.php";
+require_once __DIR__."/../_functions/database/setup.php";
+require_once __DIR__."/../_functions/database/teardown.php";
+require_once __DIR__."/../_functions/database/create.php";
+
+//
+// Setup
+//
+
+// Grab command line comments for easy access
+$args = getopt("fv", ["force", "verbose"]);
+$args["force"] = (isset($args["f"]) || isset($args["force"]));
+$args["verbose"] = (isset($args["v"]) || isset($args["verbose"]));
+
+// Optional drop database if using -f or --force
+if ($args["force"]) {
+	printf("Dropping the database. wubwubwub...\n");
+	database_teardown();
+}
+
+// Setup all our tables if need be
+database_setup();
+
+// Setup stats so we have something to exit with
+$stats = [
+	"packages" => 0,
+	"namespaces" => 0,
+	"classes" => 0,
+	"methods" => 0,
+	"properties" => 0,
+	"signals" => 0
+];
+
+//
+// Per tag functions for creating database objects
+//
+function build_class(SimpleXMLElement $node, $package) {
+	global $args;
+	global $stats;
+
+	$attr = $node->attributes();
+	$id = $attr->id;
+
+	$obj = [
+		"id" => $id,
+		"name" => $attr->name,
+		"package" => $package,
+		"deprecated" => $attr->deprecated,
+		"visibility" => $attr->visibility,
+		"abstract" => $attr->abstract,
+		"compact" => $attr->compact,
+		"fundamental" => $attr->fundamental,
+		"parent_bases" => [],
+		"parent_interfaces" => [],
+		"attributes" => []
+	];
+
+	if (isset($node->parents) || array_key_exists("parents", $node)) {
+		foreach ($node->parents[0] as $name => $value) {
+			if ($name === "base_type") {
+				$obj["parent_bases"][] = $value;
+			} else if ($name === "parent_interface") {
+				$obj["parent_interfaces"][] = $value;
+			}
+		}
+	}
+
+	if (isset($node->attributes) || array_key_exists("attributes", $node)) {
+	 	foreach ($node->attributes[0] as $tag => $value) {
+			$obj["attributes"][] = $value;
+		}
+  	}
+
+	$obj["parent_bases"] = "{".implode(", ", $obj["parent_bases"])."}";
+	$obj["parent_interfaces"] = "{".implode(", ", $obj["parent_interfaces"])."}";
+	$obj["attributes"] = "{".implode(", ", $obj["attributes"])."}";
+
+	$r = database_create('classes', $obj);
+	if (!$r && $args["verbose"]) printf("Unable to create $id class.\n");
+	if ($r) $stats["classes"] += 1;
+
+	build_next($node, $package);
+}
+
+function build_method(SimpleXMLElement $node, $package) {
+	global $args;
+	global $stats;
+
+	$attr = $node->attributes();
+	$id = $attr->id;
+
+	$obj = [
+		"id" => $id,
+		"name" => $attr->name,
+		"package" => $package,
+		"deprecated" => $attr->deprecated,
+		"visibility" => $attr->visibility,
+		"abstract" => $attr->abstract,
+		"dbus_visible" => $attr->dbus_visible,
+		"inline" => $attr->inline,
+		"override" => $attr->override,
+		"static" => $attr->static,
+		"virtual" => $attr->virtual,
+		"yields" => $attr->yields,
+		"return_type" => $attr->return_type,
+		"returns_array" => $attr->returns_array,
+		"attributes" => []
+	];
+
+	if (isset($node->attributes) || array_key_exists("attributes", $node)) {
+	 	foreach ($node->attributes[0] as $tag => $value) {
+			$obj["attributes"][] = $value;
+		}
+  	}
+
+	$obj["attributes"] = "{".implode(", ", $obj["attributes"])."}";
+
+	$r = database_create('methods', $obj);
+	if (!$r && $args["verbose"]) printf("Unable to create $id method.\n");
+	if ($r) $stats["methods"] += 1;
+}
+
+function build_property(SimpleXMLElement $node, $package) {
+	global $args;
+	global $stats;
+
+	$attr = $node->attributes();
+	$id = $attr->id;
+
+	$obj = [
+		"id" => $id,
+		"name" => $attr->name,
+		"package" => $package,
+		"deprecated" => $attr->deprecated,
+		"visibility" => $attr->visibility,
+		"abstract" => $attr->abstract,
+		"dbus_visible" => $attr->dbus_visible,
+		"override" => $attr->override,
+		"virtual" => $attr->virtual,
+		"getter_visibility" => $attr->getter_visibility,
+		"getter_get" => $attr->getter_get,
+		"setter_visibility" => $attr->setter_visibility,
+		"setter_set" => $attr->setter_set,
+		"setter_construct" => $attr->setter_construct,
+		"attributes" => []
+	];
+
+	if (isset($node->attributes) || array_key_exists("attributes", $node)) {
+	 	foreach ($node->attributes[0] as $tag => $value) {
+			$obj["attributes"][] = $value;
+		}
+  	}
+
+	$obj["attributes"] = "{".implode(", ", $obj["attributes"])."}";
+
+	$r = database_create('properties', $obj);
+	if (!$r && $args["verbose"]) printf("Unable to create $id property.\n");
+	if ($r) $stats["properties"] += 1;
+}
+
+function build_signal(SimpleXMLElement $node, $package) {
+	global $args;
+	global $stats;
+
+	$attr = $node->attributes();
+	$id = $attr->id;
+
+	$obj = [
+		"id" => $id,
+		"name" => $attr->name,
+		"package" => $package,
+		"deprecated" => $attr->deprecated,
+		"visibility" => $attr->visibility,
+		"dbus_visible" => $attr->dbus_visible,
+		"virtual" => $attr->virtual,
+		"attributes" => []
+	];
+
+	if (isset($node->attributes) || array_key_exists("attributes", $node)) {
+	 	foreach ($node->attributes[0] as $tag => $value) {
+			$obj["attributes"][] = $value;
+		}
+  	}
+
+	$obj["attributes"] = "{".implode(", ", $obj["attributes"])."}";
+
+	$r = database_create('signals', $obj);
+	if (!$r && $args["verbose"]) printf("Unable to create $id signal.\n");
+	if ($r) $stats["signals"] += 1;
+}
+
+//
+// Director function for iterating over the unknown
+//
+function build_next(SimpleXMLElement $node, $package) {
+	if (!isset($node->members) && !array_key_exists("memebers", $node)) return;
+
+	if (isset($node->members->class) || array_key_exists("class", $node->members)) {
+		foreach ($node->members->class as $class) {
+			build_class($class, $package);
+		}
+	}
+
+	if (isset($node->members->method) || array_key_exists("method", $node->members)) {
+		foreach ($node->members->method as $method) {
+			build_method($method, $package);
+		}
+	}
+
+	if (isset($node->members->property) || array_key_exists("property", $node->members)) {
+		foreach ($node->members->property as $property) {
+			build_property($property, $package);
+		}
+	}
+
+	if (isset($node->members->signal) || array_key_exists("signal", $node->members)) {
+		foreach ($node->members->signal as $signal) {
+			build_signal($signal, $package);
+		}
+	}
+}
+
+//
+// Start building the rows
+//
+$files = array_diff(scandir($settings["docs"]["directory"]), ["..", "."], $settings["docs"]["blacklist"]);
+
+foreach ($files as $packagefile) {
+	try {
+		if (!$args["verbose"]) {
+			libxml_clear_errors();
+			libxml_use_internal_errors(true);
+		}
+
+		$xml = simplexml_load_file($settings["docs"]["directory"]."/".$packagefile);
+	} catch (Exception $e) {
+		printf("Unable to open $packagefile. Continuing to next package file\n");
+		continue;
+	}
+
+	if ($xml === false) {
+		printf("Unable to open $packagefile. Continuing to next package file\n");
+		continue;
+	}
+
+	$package = $xml->attributes()->name;
+
+	$r = database_create('packages', [
+		"name" => $package
+	]);
+	if (!$r && $args["verbose"]) {
+		printf("Unable to create $package package.\n");
+	}
+	if ($r) $stats["packages"] += 1;
+
+	foreach ($xml->namespace as $namespaceRaw) {
+		$namespace = $namespaceRaw->attributes()->id;
+
+		$r = database_create('namespaces', [
+			"id" => $namespace,
+			"name" => $namespaceRaw->attributes()->name,
+			"package" => $package,
+			"deprecated" => $namespaceRaw->attributes()->deprecated,
+			"visibility" => $namespaceRaw->attributes()->visibility
+		]);
+		if (!$r && $args["verbose"]) {
+			printf("Unable to create $namespace namespace.\n");
+		}
+
+		if ($r) $stats["namespaces"] += 1;
+		build_next($namespaceRaw, $package);
+	}
+}
+
+//
+// Report card time
+//
+printf("database.php complete!\n");
+
+if ($args["verbose"]) {
+	printf("database updates:\n");
+
+	foreach ($stats as $name => $value) {
+		printf("$name => $value\n");
+	}
+}
+
+exit(0);

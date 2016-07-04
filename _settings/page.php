@@ -1,8 +1,8 @@
 <?php
 
-    if (!isset($page)) $page = [];
+if (!isset($page)) $page = [];
 
-    $page["subtitle"] = "vala-docs";
-    $page["description"] = "The canonical source for Vala API references.";
+$page["subtitle"] = "vala-docs";
+$page["description"] = "The canonical source for Vala API references.";
 
-    $page["sidebar"] = [];
+$page["sidebar"] = [];
