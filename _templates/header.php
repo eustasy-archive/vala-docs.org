@@ -20,27 +20,15 @@
         <?php echo !empty($page["scripts"]) ? $page["scripts"] : false ; ?>
     </head>
     <body>
-        <nav class="sidebar">
-            <a href="/">
-                <img src="/assets/images/site/logo.svg" alt="vala logo" height="42px" width="121.75px">
-            </a>
-            <div class="search">
-                <input type="text" placeholder="Search">
-            </div>
-            <ul>
-                <?php
-                    foreach($page["sidebar"] as $sub) {
-                        echo "<ul>";
-
-                        foreach($sub as $item) {
-                            echo $item;
-                        }
-
-                        echo "</ul>";
-                    }
-                ?>
-            </ul>
-        </nav>
+		<nav class="sidebar">
+		    <a href="/">
+		        <img src="/assets/images/site/logo.svg" alt="vala logo" height="42px" width="121.75px">
+		    </a>
+		    <div class="search">
+		        <input type="text" placeholder="Search">
+		    </div>
+			<?php include __DIR__."/sidebar.php"; ?>
+		</nav>
         <main>
             <header>
                 <div class="sidebar-menu">&#9776;</div>

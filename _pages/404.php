@@ -1,9 +1,9 @@
 <?php
-    require_once __DIR__.'/../_templates/sitewide.php';
+    require_once __DIR__."/../_templates/sitewide.php";
 
-    header('HTTP/1.1 404 Not Found');
+    header("HTTP/1.1 404 Not Found");
 
-    include $templates['header'];
+    include $templates["header"];
 ?>
 
 <section class="content" id="404-error">
@@ -14,4 +14,4 @@
 </section>
 
 <?php
-    include $templates['footer'];
+    include $templates["footer"];

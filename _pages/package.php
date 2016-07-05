@@ -1,33 +1,39 @@
 <?php
-    // 404 checking of requested package
-    require_once __DIR__.'/../_settings/docs.php';
 
-    $requestUri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
-    $pkg = substr($requestUri, 1);
+// 404 checking of requested package
+require_once __DIR__."/../_functions/database/find.php";
 
-    if (!file_exists($settings["docs"]["directory"]."/".$pkg.".xml")) {
-        require __DIR__."/404.php";
-        return;
-    }
-?>
+$uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+$uri_one = substr($requestUri, 1);
 
-<?php
-    require_once __DIR__."/../_templates/sitewide.php";
+$namespaces = database_find("namespaces", [
+    "package" => $uri_one
+]);
 
-    $page["sidebar"][] = ['<a href="#"><li class="package">'.$pkg.'</li></a>'];
-    $page["sidebar"][] = [
-        '<a href="#"><li class="namespace">thing</li></a>',
-        '<a href="#"><li class="namespace">thing</li></a>'
-    ];
+if (!isset($namespaces[0])) {
+    require __DIR__."/404.php";
+    return;
+}
 
-    include $templates["header"];
+// Process the page
+$package = $namespaces[0]["package"];
+
+require_once __DIR__."/../_templates/sitewide.php";
+
+$page["sidebar"][] = [
+    '<a href="#"><li class="package">'.$package.'</li></a>'
+];
+
+$page["sidebar"][] = array_map(function($namespace) {
+    return '<a href="/'.$namespace["package"].'/'.$namespace["id"].'"><li class="namespace">'.$namespace["name"].'</li></a>';
+}, $namespaces);
+
+include $templates["header"];
+
 ?>
 
 <section class="content">
-    <h1><?php echo $pkg; ?></h1>
-    <div class="wrapper">
-        <p>ATK provides the set of accessibility interfaces that are implemented by other toolkits and applications. Using the ATK interfaces, accessibility tools have full access to view and control running applications.</p>
-    </div>
+    <h1><?php echo $package; ?></h1>
     <div>
         <h4 class="sticky">Interfaces</h4>
         <ul class="wrapper" id="interface">
@@ -93,55 +99,6 @@
             </li>
         </ul>
     </div>
-    <div>
-        <h4 class="sticky">Classes</h4>
-        <ul class="wrapper" id="class">
-            <li>
-                <a href="#">AttributeSet</a>
-                <span>This is a singly-linked list (a SList) of Attribute.</span>
-            </li>
-            <li>
-                <a href="#">GObjectAccessible</a>
-                <span>This object class is derived from AtkObject.</span>
-            </li>
-            <li>
-                <a href="#">Hyperlink</a>
-                <span>An ATK object which encapsulates a link or set of links (for instance in the case of client-side image maps) in a hypertext document.</span>
-            </li>
-            <li>
-                <a href="#">Misc</a>
-                <span>A set of utility functions for thread locking.</span>
-            </li>
-            <li>
-                <a href="#">NoOpObject</a>
-                <span>An AtkNoOpObject is an AtkObject which purports to implement all ATK interfaces.</span>
-            </li>
-            <li>
-                <a href="#">NoOpObjectFactory</a>
-                <span>The AtkObjectFactory which creates an AtkNoOpObject.</span>
-            </li>
-            <li>
-                <a href="#">Object</a>
-                <span>This class is the primary class for accessibility support via the Accessibility ToolKit (ATK).</span>
-            </li>
-            <li>
-                <a href="#">ObjectFactory</a>
-                <span>This class is the base object class for a factory used to create an accessible object for a specific GType.</span>
-            </li>
-            <li>
-                <a href="#">Plug</a>
-                <span>See Socket</span>
-            </li>
-            <li>
-                <a href="#">Range</a>
-                <span>Range are used on Value, in order to represent the full range of a given component (for example an slider or a range control), or to define each individual subrange this full range is splitted if available.</span>
-            </li>
-            <li>
-                <a href="#">Registry</a>
-                <span>The AtkRegistry is normally used to create appropriate ATK "peers" for user interface components.</span>
-            </li>
-        </div>
-    </ul>
 </section>
 
 <?php

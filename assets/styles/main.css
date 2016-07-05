@@ -161,6 +161,10 @@ nav.sidebar > ul li.package::before {
     background-image: url("/assets/images/icons/package.svg");
 }
 
+nav.sidebar > ul li.namespace::before {
+    background-image: url("/assets/images/icons/namespace.svg");
+}
+
 nav.sidebar > ul a {
     color: inherit;
     text-decoration: none;
@@ -291,7 +295,7 @@ section.content .wrapper {
 }
 
 section.content h1 {
-    padding: 12px 20px;
+    padding: 10px 20px;
     min-height: 64px;
 }
 
