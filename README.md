@@ -1,4 +1,6 @@
-# [vala-docs.org](https://vala-docs.org/)
+# [Vala-Docs.org](https://vala-docs.org/)
+
+[![Bountysource](https://www.bountysource.com/badge/tracker?tracker_id=28754245)](https://www.bountysource.com/teams/eustasy/issues?tracker_ids=28754245)
 
 ## Installation
 ### Requirements
