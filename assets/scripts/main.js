@@ -119,6 +119,7 @@ $(function() {
     }
 
     var calculate = function() {
+        clearTimeout(debounceTimer);
         debounceTimer = null;
 
         for (var i = 0; i < $elements.length; i++) {
