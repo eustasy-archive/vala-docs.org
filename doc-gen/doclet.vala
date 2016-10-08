@@ -257,7 +257,7 @@ namespace DocGen {
         }
     }
 
-    public class JsonDoclet : Valadoc.Doclet, Valadoc.Api.Visitor {
+    public class XmlDoclet : Valadoc.Doclet, Valadoc.Api.Visitor {
         private static const string OUTPUT_DIR = "docs";
         private static const bool USE_COMPRESSION = false;
 
@@ -305,5 +305,5 @@ namespace DocGen {
 }
 
 public Type register_plugin (Valadoc.ModuleLoader loader) {
-    return typeof (DocGen.JsonDoclet);
+    return typeof (DocGen.XmlDoclet);
 }

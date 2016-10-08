@@ -16,10 +16,10 @@ generate-xml: update-girs libdoclet.so
 		--driver $(VALA_VERSION) \
 		--deps
 
-JsonDoclet.c: JsonDoclet.vala
+doclet.c: doclet.vala
 	valac -C $(VALA_DEPS) $<
 
-libdoclet.so: JsonDoclet.c
+libdoclet.so: doclet.c
 	$(CC) $(CFLAGS) $(LDLIBS) -o $@ $<
 
 update-girs:
