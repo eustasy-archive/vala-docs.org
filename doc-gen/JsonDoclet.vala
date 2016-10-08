@@ -146,6 +146,10 @@ namespace DocGen {
 
         public override void visit_method (Valadoc.Api.Method method) {
             if (write_node_element (method.is_constructor ? "constructor" : "method", method)) {
+                if (method.base_method != null && method.base_method != method) {
+                    check_error_code (builder.write_attribute ("base_method", method.base_method.get_full_name ()));
+                }
+
                 check_error_code (builder.write_attribute ("abstract", method.is_abstract.to_string ()));
                 check_error_code (builder.write_attribute ("dbus_visible", method.is_dbus_visible.to_string ()));
                 check_error_code (builder.write_attribute ("inline", method.is_inline.to_string ()));
