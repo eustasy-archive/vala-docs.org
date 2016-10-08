@@ -12,6 +12,7 @@ generate-xml: update-girs libdoclet.so
 		-o docs \
 		--importdir girs/gir-1.0 \
 		--import GLib-2.0 \
+		--import GObject-2.0 \
 		--girdir girs/gir-1.0 \
 		--vapidir girs/vala/vapi \
 		--doclet . \
