@@ -129,8 +129,12 @@ namespace DocGen {
             if (write_node_element ("delegate", delegate)) {
                 check_error_code (builder.write_attribute ("static", delegate.is_static.to_string ()));
 
+                if (delegate.return_type != null && delegate.return_type.data_type != null) {
+                    write_type_specification_attribute ("return_type", delegate.return_type.data_type);
+                }
+
                 write_attribute_list_element (delegate.get_attributes ());
-                end_node_element (delegate);
+                end_node_element (delegate, true);
             }
         }
 
@@ -139,8 +143,12 @@ namespace DocGen {
                 check_error_code (builder.write_attribute ("dbus_visible", signal.is_dbus_visible.to_string ()));
                 check_error_code (builder.write_attribute ("virtual", signal.is_virtual.to_string ()));
 
+                if (signal.return_type != null && signal.return_type.data_type != null) {
+                    write_type_specification_attribute ("return_type", signal.return_type.data_type);
+                }
+
                 write_attribute_list_element (signal.get_attributes ());
-                end_node_element (signal);
+                end_node_element (signal, true);
             }
         }
 
@@ -159,27 +167,32 @@ namespace DocGen {
                 check_error_code (builder.write_attribute ("yields", method.is_yields.to_string ()));
 
                 if (method.return_type != null && method.return_type.data_type != null) {
-                    bool returns_array = false;
-
-                    if (method.return_type.data_type is Valadoc.Api.Pointer) {
-                        check_error_code (builder.write_attribute ("return_type", "void"));
-                    } else if (method.return_type.data_type is Valadoc.Api.Array) {
-                        check_error_code (builder.write_attribute ("return_type", ((Valadoc.Api.Node)((Valadoc.Api.TypeReference)((Valadoc.Api.Array)method.return_type.data_type).data_type).data_type).get_full_name ()));
-
-                        returns_array = true;
-                    } else {
-                        check_error_code (builder.write_attribute ("return_type", ((Valadoc.Api.Node)method.return_type.data_type).get_full_name ()));
-                    }
-
-                    check_error_code (builder.write_attribute ("returns_array", returns_array.to_string ()));
+                    write_type_specification_attribute ("return_type", method.return_type.data_type);
                 }
 
                 write_attribute_list_element (method.get_attributes ());
-                end_node_element (method);
+                end_node_element (method, true);
             }
         }
 
-        private bool write_node_element (string type, Valadoc.Api.Symbol symbol, bool is_container = false) {
+        public override void visit_formal_parameter (Valadoc.Api.FormalParameter formal_parameter) {
+            if (write_node_element ("formal_parameter", formal_parameter, false, false)) {
+                check_error_code (builder.write_attribute ("ellipsis", formal_parameter.ellipsis.to_string ()));
+                check_error_code (builder.write_attribute ("is_out", formal_parameter.is_out.to_string ()));
+                check_error_code (builder.write_attribute ("is_ref", formal_parameter.is_ref.to_string ()));
+                check_error_code (builder.write_attribute ("has_default_value", formal_parameter.has_default_value.to_string ()));
+                // TODO: Default value points to the documentation-class "Run"?
+
+                if (formal_parameter.parameter_type != null && formal_parameter.parameter_type.data_type != null) {
+                    write_type_specification_attribute ("parameter_type", formal_parameter.parameter_type.data_type);
+                }
+
+                write_attribute_list_element (formal_parameter.get_attributes ());
+                end_node_element (formal_parameter);
+            }
+        }
+
+        private bool write_node_element (string type, Valadoc.Api.Symbol symbol, bool is_container = false, bool has_visibility = true) {
             if (symbol.name == null) {
                 if (is_container) {
                     symbol.accept_all_children (this);
@@ -193,9 +206,35 @@ namespace DocGen {
             check_error_code (builder.write_attribute ("name", symbol.name));
 
             check_error_code (builder.write_attribute ("deprecated", symbol.is_deprecated.to_string ()));
-            check_error_code (builder.write_attribute ("visibility", get_symbol_visibility (symbol)));
+
+            if (has_visibility) {
+                check_error_code (builder.write_attribute ("visibility", get_symbol_visibility (symbol)));
+            }
 
             return true;
+        }
+
+        private void write_type_specification_attribute (string attribute_name, Valadoc.Api.Item data_type) {
+            if (data_type is Valadoc.Api.Pointer) {
+                check_error_code (builder.write_attribute (attribute_name, "void"));
+            } else if (data_type is Valadoc.Api.Array) {
+                int dimension = 0;
+                Valadoc.Api.Item array_type = data_type;
+
+                while (array_type is Valadoc.Api.Array) {
+                    array_type = ((Valadoc.Api.TypeReference)((Valadoc.Api.Array)data_type).data_type).data_type;
+                    dimension++;
+                }
+
+                if (array_type is Valadoc.Api.Pointer) {
+                    check_error_code (builder.write_attribute (attribute_name, "void"));
+                } else {
+                    check_error_code (builder.write_attribute (attribute_name, ((Valadoc.Api.Node)array_type).get_full_name ()));
+                }
+                check_error_code (builder.write_attribute ("%s_array_dimension".printf (attribute_name), dimension.to_string ()));
+            } else {
+                check_error_code (builder.write_attribute (attribute_name, ((Valadoc.Api.Node)data_type).get_full_name ()));
+            }
         }
 
         private void write_attribute_list_element (Gee.Collection<Valadoc.Api.Attribute> attributes) {
