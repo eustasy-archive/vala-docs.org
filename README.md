@@ -1,4 +1,6 @@
-# [vala-docs.org](https://vala-docs.org/)
+# [Vala-Docs.org](https://vala-docs.org/)
+
+[![Bountysource](https://www.bountysource.com/badge/tracker?tracker_id=28754245)](https://www.bountysource.com/teams/eustasy/issues?tracker_ids=28754245)
 
 ## Installation
 ### Requirements
@@ -18,8 +20,8 @@ After generation is done there is one json file per package in `doc-gen/docs`.
 - Files and folders that start with underscores are hidden on the server.
 
 ## Roadmap
-- Create a generator of JSON files, one per package, with `valadoc`
-- Parse JSON into readable documentation files with [ParseDown Extra][1].
+- Create a generator of XML files, one per package, with `valadoc`
+- Parse XML into readable documentation files with [ParseDown Extra][1].
 - Search, maybe with [DuckDuckGo][2]
 
 [1]: https://github.com/erusev/parsedown-extra
