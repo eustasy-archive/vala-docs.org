@@ -1,2 +1,3 @@
 /girs/
 libdoclet.so
+*.c
