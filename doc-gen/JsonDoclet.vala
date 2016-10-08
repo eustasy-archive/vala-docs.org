@@ -231,6 +231,15 @@ namespace DocGen {
         }
 
         private void end_node_element (Valadoc.Api.Symbol symbol, bool is_container = false) {
+            if (symbol.documentation != null) {
+                check_error_code (builder.start_element ("documentation"));
+
+                DocumentationVisitor documentationVisitor = new DocumentationVisitor (builder);
+                symbol.documentation.accept_children (documentationVisitor);
+
+                check_error_code (builder.end_element ());
+            }
+
             if (is_container) {
                 check_error_code (builder.start_element ("members"));
 
@@ -254,6 +263,26 @@ namespace DocGen {
             }
 
             return "";
+        }
+    }
+
+    private class DocumentationVisitor : Valadoc.Content.ContentVisitor {
+        public unowned Xml.TextWriter builder { private get; construct; }
+
+        public DocumentationVisitor (Xml.TextWriter builder) {
+            Object (builder: builder);
+        }
+
+        public override void visit_paragraph (Valadoc.Content.Paragraph paragraph) {
+            check_error_code (builder.start_element ("paragraph"));
+
+            foreach (Valadoc.Content.Inline part in paragraph.content) {
+                if (part is Valadoc.Content.Text) {
+                    check_error_code (builder.write_element ("text", ((Valadoc.Content.Text)part).content));
+                }
+            }
+
+            check_error_code (builder.end_element ());
         }
     }
 
