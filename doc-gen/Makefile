@@ -1,6 +1,12 @@
-VALA_VERSION = $(shell vala --version | awk -F. '{ print "0."$$2 }')
+VALA_VERSION := $(shell vala --version | awk -F. '{ print "0."$$2 }')
 
-generate-json: update-girs libdoclet.so
+DEPS := valadoc-1.0 libxml-2.0
+VALA_DEPS := $(foreach dep,$(DEPS),--pkg $(dep))
+
+CFLAGS := -shared -fPIC $(shell pkg-config --cflags $(DEPS))
+LDLIBS := $(shell pkg-config --libs $(DEPS))
+
+generate-xml: update-girs libdoclet.so
 	$(RM) -r docs
 	G_MESSAGES_DEBUG=all valadoc \
 		-o docs \
@@ -10,10 +16,11 @@ generate-json: update-girs libdoclet.so
 		--driver $(VALA_VERSION) \
 		--deps
 
-libdoclet.so: JsonDoclet.vala
-	valac -C --pkg valadoc-1.0 --pkg libxml-2.0 JsonDoclet.vala
-	gcc -shared -fPIC -o libdoclet.so JsonDoclet.c $(shell pkg-config --cflags --libs valadoc-1.0 libxml-2.0)
-	rm JsonDoclet.c
+JsonDoclet.c: JsonDoclet.vala
+	valac -C $(VALA_DEPS) $<
+
+libdoclet.so: JsonDoclet.c
+	$(CC) $(CFLAGS) $(LDLIBS) -o $@ $<
 
 update-girs:
 	[ -d girs ] && git -C girs pull || git clone https://github.com/nemequ/vala-girs.git girs
