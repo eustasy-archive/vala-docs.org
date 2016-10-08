@@ -1,7 +1,7 @@
 VALA_VERSION = $(shell vala --version | awk -F. '{ print "0."$$2 }')
 
 generate-json: update-girs libdoclet.so
-	rm -rf docs
+	$(RM) -r docs
 	G_MESSAGES_DEBUG=all valadoc \
 		-o docs \
 		--girdir girs/gir-1.0/ \
@@ -16,14 +16,10 @@ libdoclet.so: JsonDoclet.vala
 	rm JsonDoclet.c
 
 update-girs:
-	if test -d girs; then \
-		git -C girs pull ; \
-	else \
-		git clone https://github.com/nemequ/vala-girs.git girs ; \
-	fi
+	[ -d girs ] && git -C girs pull || git clone https://github.com/nemequ/vala-girs.git girs
 
 generate-all: update-girs libdoclet.so
-	rm -rf docs
+	$(RM) -r docs
 	for pkg in $(shell find /usr/share/vala-$(VALA_VERSION)/vapi -name '*.vapi' | cut -d '/' -f 6 | sed 's/\.vapi//'); do \
 		echo $$pkg; \
 		G_MESSAGES_DEBUG=all valadoc \
