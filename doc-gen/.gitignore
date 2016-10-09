@@ -1,3 +1,4 @@
 /girs/
+/docs/
 libdoclet.so
 *.c
