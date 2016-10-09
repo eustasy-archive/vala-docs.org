@@ -119,7 +119,7 @@ namespace DocGen {
         }
 
         public override void visit_enum_value (Valadoc.Api.EnumValue enum_value) {
-            if (write_node_element ("enum_value", enum_value)) {
+            if (write_node_element ("enum_value", enum_value, false, false)) {
                 write_attribute_list_element (enum_value.get_attributes ());
                 end_node_element (enum_value);
             }
