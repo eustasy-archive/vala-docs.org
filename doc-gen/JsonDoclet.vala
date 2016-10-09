@@ -90,14 +90,14 @@ namespace DocGen {
                 }
 
                 write_attribute_list_element (property.get_attributes ());
-                end_node_element (property);
+                end_node_element (property, false, true);
             }
         }
 
         public override void visit_constant (Valadoc.Api.Constant constant) {
             if (write_node_element ("constant", constant)) {
                 write_attribute_list_element (constant.get_attributes ());
-                end_node_element (constant);
+                end_node_element (constant, false, true);
             }
         }
 
@@ -107,7 +107,7 @@ namespace DocGen {
                 check_error_code (builder.write_attribute ("volatile", field.is_volatile.to_string ()));
 
                 write_attribute_list_element (field.get_attributes ());
-                end_node_element (field);
+                end_node_element (field, false, true);
             }
         }
 
@@ -134,7 +134,7 @@ namespace DocGen {
                 }
 
                 write_attribute_list_element (delegate.get_attributes ());
-                end_node_element (delegate, true);
+                end_node_element (delegate, false, true);
             }
         }
 
@@ -148,7 +148,7 @@ namespace DocGen {
                 }
 
                 write_attribute_list_element (signal.get_attributes ());
-                end_node_element (signal, true);
+                end_node_element (signal, false, true);
             }
         }
 
@@ -171,7 +171,7 @@ namespace DocGen {
                 }
 
                 write_attribute_list_element (method.get_attributes ());
-                end_node_element (method, true);
+                end_node_element (method, false, true);
             }
         }
 
@@ -188,7 +188,13 @@ namespace DocGen {
                 }
 
                 write_attribute_list_element (formal_parameter.get_attributes ());
-                end_node_element (formal_parameter);
+                end_node_element (formal_parameter, false, true);
+            }
+        }
+
+        public override void visit_type_parameter (Valadoc.Api.TypeParameter type_parameter) {
+            if (write_node_element ("type_parameter", type_parameter, false, false)) {
+                end_node_element (type_parameter, false, true);
             }
         }
 
@@ -269,7 +275,7 @@ namespace DocGen {
             }
         }
 
-        private void end_node_element (Valadoc.Api.Symbol symbol, bool is_container = false) {
+        private void end_node_element (Valadoc.Api.Symbol symbol, bool is_container = false, bool has_quiet_members = false) {
             if (symbol.documentation != null) {
                 check_error_code (builder.start_element ("documentation"));
 
@@ -285,6 +291,9 @@ namespace DocGen {
                 symbol.accept_all_children (this);
 
                 check_error_code (builder.end_element ());
+            } else if (has_quiet_members) {
+                // "Quiet members" aren't real members (e.g. method parameters)
+                symbol.accept_all_children (this);
             }
 
             check_error_code (builder.end_element ());
