@@ -277,7 +277,7 @@ namespace DocGen {
             }
         }
 
-        private void end_node_element (Valadoc.Api.Symbol symbol, bool is_container = false) {
+        private void end_node_element (Valadoc.Api.Symbol symbol, bool is_container = false, bool has_quiet_members = false) {
             var doctree = symbol.documentation;
             if (doctree != null) {
                 check_error_code (builder.start_element ("documentation"));
