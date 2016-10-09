@@ -1,3 +1,5 @@
+using Valadoc.Content;
+
 namespace DocGen {
     private class PackageVisitor : Valadoc.Api.Visitor {
         public unowned Xml.TextWriter builder { private get; construct; }
@@ -90,14 +92,14 @@ namespace DocGen {
                 }
 
                 write_attribute_list_element (property.get_attributes ());
-                end_node_element (property);
+                end_node_element (property, false, true);
             }
         }
 
         public override void visit_constant (Valadoc.Api.Constant constant) {
             if (write_node_element ("constant", constant)) {
                 write_attribute_list_element (constant.get_attributes ());
-                end_node_element (constant);
+                end_node_element (constant, false, true);
             }
         }
 
@@ -107,7 +109,7 @@ namespace DocGen {
                 check_error_code (builder.write_attribute ("volatile", field.is_volatile.to_string ()));
 
                 write_attribute_list_element (field.get_attributes ());
-                end_node_element (field);
+                end_node_element (field, false, true);
             }
         }
 
@@ -119,7 +121,7 @@ namespace DocGen {
         }
 
         public override void visit_enum_value (Valadoc.Api.EnumValue enum_value) {
-            if (write_node_element ("enum_value", enum_value)) {
+            if (write_node_element ("enum_value", enum_value, false, false)) {
                 write_attribute_list_element (enum_value.get_attributes ());
                 end_node_element (enum_value);
             }
@@ -129,8 +131,12 @@ namespace DocGen {
             if (write_node_element ("delegate", delegate)) {
                 check_error_code (builder.write_attribute ("static", delegate.is_static.to_string ()));
 
+                if (delegate.return_type != null && delegate.return_type.data_type != null) {
+                    write_type_specification_attribute ("return_type", delegate.return_type.data_type);
+                }
+
                 write_attribute_list_element (delegate.get_attributes ());
-                end_node_element (delegate);
+                end_node_element (delegate, false, true);
             }
         }
 
@@ -139,13 +145,21 @@ namespace DocGen {
                 check_error_code (builder.write_attribute ("dbus_visible", signal.is_dbus_visible.to_string ()));
                 check_error_code (builder.write_attribute ("virtual", signal.is_virtual.to_string ()));
 
+                if (signal.return_type != null && signal.return_type.data_type != null) {
+                    write_type_specification_attribute ("return_type", signal.return_type.data_type);
+                }
+
                 write_attribute_list_element (signal.get_attributes ());
-                end_node_element (signal);
+                end_node_element (signal, false, true);
             }
         }
 
         public override void visit_method (Valadoc.Api.Method method) {
             if (write_node_element (method.is_constructor ? "constructor" : "method", method)) {
+                if (method.base_method != null && method.base_method != method) {
+                    check_error_code (builder.write_attribute ("base_method", method.base_method.get_full_name ()));
+                }
+
                 check_error_code (builder.write_attribute ("abstract", method.is_abstract.to_string ()));
                 check_error_code (builder.write_attribute ("dbus_visible", method.is_dbus_visible.to_string ()));
                 check_error_code (builder.write_attribute ("inline", method.is_inline.to_string ()));
@@ -155,27 +169,38 @@ namespace DocGen {
                 check_error_code (builder.write_attribute ("yields", method.is_yields.to_string ()));
 
                 if (method.return_type != null && method.return_type.data_type != null) {
-                    bool returns_array = false;
-
-                    if (method.return_type.data_type is Valadoc.Api.Pointer) {
-                        check_error_code (builder.write_attribute ("return_type", "void"));
-                    } else if (method.return_type.data_type is Valadoc.Api.Array) {
-                        check_error_code (builder.write_attribute ("return_type", ((Valadoc.Api.Node)((Valadoc.Api.TypeReference)((Valadoc.Api.Array)method.return_type.data_type).data_type).data_type).get_full_name ()));
-
-                        returns_array = true;
-                    } else {
-                        check_error_code (builder.write_attribute ("return_type", ((Valadoc.Api.Node)method.return_type.data_type).get_full_name ()));
-                    }
-
-                    check_error_code (builder.write_attribute ("returns_array", returns_array.to_string ()));
+                    write_type_specification_attribute ("return_type", method.return_type.data_type);
                 }
 
                 write_attribute_list_element (method.get_attributes ());
-                end_node_element (method);
+                end_node_element (method, false, true);
             }
         }
 
-        private bool write_node_element (string type, Valadoc.Api.Symbol symbol, bool is_container = false) {
+        public override void visit_formal_parameter (Valadoc.Api.FormalParameter formal_parameter) {
+            if (write_node_element ("formal_parameter", formal_parameter, false, false)) {
+                check_error_code (builder.write_attribute ("ellipsis", formal_parameter.ellipsis.to_string ()));
+                check_error_code (builder.write_attribute ("is_out", formal_parameter.is_out.to_string ()));
+                check_error_code (builder.write_attribute ("is_ref", formal_parameter.is_ref.to_string ()));
+                check_error_code (builder.write_attribute ("has_default_value", formal_parameter.has_default_value.to_string ()));
+                // TODO: Default value points to the documentation-class "Run"?
+
+                if (formal_parameter.parameter_type != null && formal_parameter.parameter_type.data_type != null) {
+                    write_type_specification_attribute ("parameter_type", formal_parameter.parameter_type.data_type);
+                }
+
+                write_attribute_list_element (formal_parameter.get_attributes ());
+                end_node_element (formal_parameter, false, true);
+            }
+        }
+
+        public override void visit_type_parameter (Valadoc.Api.TypeParameter type_parameter) {
+            if (write_node_element ("type_parameter", type_parameter, false, false)) {
+                end_node_element (type_parameter, false, true);
+            }
+        }
+
+        private bool write_node_element (string type, Valadoc.Api.Symbol symbol, bool is_container = false, bool has_visibility = true) {
             if (symbol.name == null) {
                 if (is_container) {
                     symbol.accept_all_children (this);
@@ -189,9 +214,35 @@ namespace DocGen {
             check_error_code (builder.write_attribute ("name", symbol.name));
 
             check_error_code (builder.write_attribute ("deprecated", symbol.is_deprecated.to_string ()));
-            check_error_code (builder.write_attribute ("visibility", get_symbol_visibility (symbol)));
+
+            if (has_visibility) {
+                check_error_code (builder.write_attribute ("visibility", get_symbol_visibility (symbol)));
+            }
 
             return true;
+        }
+
+        private void write_type_specification_attribute (string attribute_name, Valadoc.Api.Item data_type) {
+            if (data_type is Valadoc.Api.Pointer) {
+                check_error_code (builder.write_attribute (attribute_name, "void"));
+            } else if (data_type is Valadoc.Api.Array) {
+                int dimension = 0;
+                Valadoc.Api.Item array_type = data_type;
+
+                while (array_type is Valadoc.Api.Array) {
+                    array_type = ((Valadoc.Api.TypeReference)((Valadoc.Api.Array)data_type).data_type).data_type;
+                    dimension++;
+                }
+
+                if (array_type is Valadoc.Api.Pointer) {
+                    check_error_code (builder.write_attribute (attribute_name, "void"));
+                } else {
+                    check_error_code (builder.write_attribute (attribute_name, ((Valadoc.Api.Node)array_type).get_full_name ()));
+                }
+                check_error_code (builder.write_attribute ("%s_array_dimension".printf (attribute_name), dimension.to_string ()));
+            } else {
+                check_error_code (builder.write_attribute (attribute_name, ((Valadoc.Api.Node)data_type).get_full_name ()));
+            }
         }
 
         private void write_attribute_list_element (Gee.Collection<Valadoc.Api.Attribute> attributes) {
@@ -226,13 +277,26 @@ namespace DocGen {
             }
         }
 
-        private void end_node_element (Valadoc.Api.Symbol symbol, bool is_container = false) {
+        private void end_node_element (Valadoc.Api.Symbol symbol, bool is_container = false, bool has_quiet_members = false) {
+            var doctree = symbol.documentation;
+            if (doctree != null) {
+                check_error_code (builder.start_element ("documentation"));
+
+                var documentationVisitor = new DocumentationVisitor (builder);
+                doctree.accept (documentationVisitor);
+
+                check_error_code (builder.end_element ());
+            }
+
             if (is_container) {
                 check_error_code (builder.start_element ("members"));
 
                 symbol.accept_all_children (this);
 
                 check_error_code (builder.end_element ());
+            } else if (has_quiet_members) {
+                // "Quiet members" aren't real members (e.g. method parameters)
+                symbol.accept_all_children (this);
             }
 
             check_error_code (builder.end_element ());
@@ -253,7 +317,105 @@ namespace DocGen {
         }
     }
 
-    public class JsonDoclet : Valadoc.Doclet, Valadoc.Api.Visitor {
+    /*
+    Documentation tree:
+
+    comment
+        content[0] = summary
+        content = description
+            blocks
+                paragraph
+                    text & runs
+
+    */
+    private class DocumentationVisitor : ContentVisitor {
+        public unowned Xml.TextWriter builder { private get; construct; }
+
+        public DocumentationVisitor (Xml.TextWriter builder) {
+            Object (builder: builder);
+        }
+
+        public override void visit_comment (Comment comment) {
+            var summary = comment.content[0];
+            check_error_code (builder.start_element ("summary"));
+            builder.set_indent (false);
+            summary.accept_children (this);
+            builder.end_element ();
+            builder.write_string ("\n");
+            builder.set_indent (true);
+
+            builder.start_element ("description");
+            comment.accept_children (this);
+            builder.end_element ();
+        }
+
+        public override void visit_text (Text text) {
+            builder.write_string (text.content);
+        }
+
+        public override void visit_run (Run run) {
+            string tag;
+            if (run.style == Run.Style.MONOSPACED)
+                tag = "monospaced"; // typo in valadoc
+            else if (run.style == Run.Style.NONE)
+                tag = null;
+            else
+                tag = run.style.to_string ();
+
+
+            if (tag != null)
+                check_error_code (builder.start_element (tag));
+            run.accept_children (this);
+            if (tag != null)
+                check_error_code (builder.end_element ());
+        }
+
+        public override void visit_link (Link link) {
+            check_error_code (builder.start_element ("link"));
+            check_error_code (builder.write_attribute ("url", link.url));
+            link.accept_children (this);
+            check_error_code (builder.end_element ());
+        }
+
+        /**
+         * A taglet is @param, @return, etc...
+         */
+        public override void visit_taglet (Taglet taglet) {
+            if (taglet is Valadoc.Taglets.Return) {
+                check_error_code (builder.start_element ("return"));
+                taglet.accept_children (this);
+                check_error_code (builder.end_element ());
+            } else if (taglet is Valadoc.Taglets.Param) {
+                var param = (Valadoc.Taglets.Param)taglet;
+                check_error_code (builder.start_element ("param"));
+                check_error_code (builder.write_attribute ("name", param.parameter_name));
+                check_error_code (builder.write_attribute ("position", param.position.to_string ()));
+                check_error_code (builder.write_attribute ("is_this", param.is_this.to_string ()));
+                taglet.accept_children (this);
+                check_error_code (builder.end_element ());
+            } else {
+                builder.write_string ("[taglet]");
+            }
+        }
+
+        public override void visit_symbol_link (SymbolLink link) {
+            // This isn't indented because it is in a Run with style = none
+            check_error_code (builder.start_element ("symbollink"));
+            builder.write_string (link.given_symbol_name);
+            check_error_code (builder.end_element ());
+        }
+
+        public override void visit_paragraph (Paragraph paragraph) {
+            check_error_code (builder.start_element ("paragraph"));
+            builder.set_indent (false);
+            paragraph.accept_children (this);
+            check_error_code (builder.end_element ());
+            builder.write_string ("\n");
+            builder.set_indent (true);
+        }
+    }
+
+    public class XmlDoclet : Valadoc.Doclet, Valadoc.Api.Visitor {
         private static const string OUTPUT_DIR = "docs";
         private static const bool USE_COMPRESSION = false;
 
@@ -276,9 +438,12 @@ namespace DocGen {
                 return;
             }
 
+            info ("Building docs for %s", package.name);
+
             Xml.TextWriter builder = new Xml.TextWriter.filename ("%s/%s.xml".printf (OUTPUT_DIR, package.name), USE_COMPRESSION);
             builder.set_indent (true);
             check_error_code (builder.start_document ("1.0", "utf-8"));
+            check_error_code (builder.write_comment (" %s.xml generated by vala-doc-gen, do not modify ".printf (package.name)));
 
             check_error_code (builder.start_element ("package"));
             check_error_code (builder.write_attribute ("name", package.name));
@@ -300,5 +465,5 @@ namespace DocGen {
 }
 
 public Type register_plugin (Valadoc.ModuleLoader loader) {
-    return typeof (DocGen.JsonDoclet);
+    return typeof (DocGen.XmlDoclet);
 }
