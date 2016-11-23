@@ -1,12 +1,12 @@
 VALA_VERSION := $(shell vala --version | awk -F. '{ print "0."$$2 }')
 
 DEPS := valadoc-1.0 libxml-2.0
-VALA_DEPS := $(foreach dep,$(DEPS),--pkg $(dep))
+VALAFLAGS := $(patsubst %,--pkg=%,$(DEPS)) -g
 
 CFLAGS := -g -shared -fPIC $(shell pkg-config --cflags $(DEPS))
 LDLIBS := $(shell pkg-config --libs $(DEPS))
 
-generate-xml: update-girs libdoclet.so
+generate-xml: update-girs generator libdoclet.so
 	$(RM) -r docs
 	G_MESSAGES_DEBUG=all valadoc \
 		-o docs \
@@ -19,11 +19,13 @@ generate-xml: update-girs libdoclet.so
 		--driver $(VALA_VERSION) \
 		--deps
 
-doclet.c: doclet.vala
-	valac -g -C $(VALA_DEPS) $<
+generator: generator.vala
+	valac $(VALAFLAGS) -o $@ $^
 
-libdoclet.so: doclet.c
-	$(CC) $(CFLAGS) $(LDLIBS) -o $@ $<
+libdoclet.so: doclet.vala
+	valac $(VALAFLAGS) -C $^
+	$(CC) $(CFLAGS) $(LDLIBS) -o $@ $(patsubst %.vala,%.c,$^)
+	$(RM) $(patsubst %.vala,%.c,$^)
 
 update-girs:
 	[ -d girs ] && git -C girs pull || git clone https://github.com/nemequ/vala-girs.git girs

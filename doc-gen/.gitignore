@@ -2,3 +2,4 @@
 /docs/
 libdoclet.so
 *.c
+generator
