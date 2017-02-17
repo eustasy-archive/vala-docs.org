@@ -18,4 +18,4 @@ RUN apt update && apt install -y \
     valac \
     valadoc
 
-CMD cd /valadoc && make
+CMD cd /valadoc && make clean && make
