@@ -23,7 +23,7 @@ doclet.c: doclet.vala
 	valac -g -C $(VALA_DEPS) $<
 
 libdoclet.so: doclet.c
-	$(CC) $(CFLAGS) $(LDLIBS) -o $@ $<
+	$(CC) -o $@ $< $(CFLAGS) $(LDLIBS)
 
 update-girs:
 	[ -d girs ] && git -C girs pull || git clone https://github.com/nemequ/vala-girs.git girs
