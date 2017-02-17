@@ -44,4 +44,9 @@ generate-all: update-girs libdoclet.so
 			--deps; \
 	done
 
-.PHONY: all generate-xml generate-all update-girs
+clean:
+	$(RM) libdoclet.so
+	$(RM) doclet.c
+	$(RM) -r docs
+
+.PHONY: all clean generate-xml generate-all update-girs
