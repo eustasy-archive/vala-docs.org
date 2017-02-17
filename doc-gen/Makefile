@@ -6,6 +6,17 @@ VALA_DEPS := $(foreach dep,$(DEPS),--pkg $(dep))
 CFLAGS := -g -shared -fPIC $(shell pkg-config --cflags $(DEPS))
 LDLIBS := $(shell pkg-config --libs $(DEPS))
 
+all: generate-xml
+
+doclet.c: doclet.vala
+	valac -g -C $(VALA_DEPS) $<
+
+libdoclet.so: doclet.c
+	$(CC) -o $@ $< $(CFLAGS) $(LDLIBS)
+
+update-girs:
+	[ -d girs ] && git -C girs pull || git clone https://github.com/nemequ/vala-girs.git girs
+
 generate-xml: update-girs libdoclet.so
 	$(RM) -r docs
 	G_MESSAGES_DEBUG=all valadoc \
@@ -18,15 +29,6 @@ generate-xml: update-girs libdoclet.so
 		--doclet . \
 		--driver $(VALA_VERSION) \
 		--deps
-
-doclet.c: doclet.vala
-	valac -g -C $(VALA_DEPS) $<
-
-libdoclet.so: doclet.c
-	$(CC) -o $@ $< $(CFLAGS) $(LDLIBS)
-
-update-girs:
-	[ -d girs ] && git -C girs pull || git clone https://github.com/nemequ/vala-girs.git girs
 
 generate-all: update-girs libdoclet.so
 	$(RM) -r docs
@@ -42,4 +44,4 @@ generate-all: update-girs libdoclet.so
 			--deps; \
 	done
 
-.PHONY: generate-xml generate-all update-girs
+.PHONY: all generate-xml generate-all update-girs
