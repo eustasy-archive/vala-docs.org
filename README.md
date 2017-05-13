@@ -1,5 +1,8 @@
 # [Vala-Docs.org](https://vala-docs.org/)
 
+[![Build Status](https://travis-ci.org/eustasy/vala-docs.org.svg?branch=master)](https://travis-ci.org/eustasy/vala-docs.org)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0d039ca966e94665a337630eedd62724)](https://www.codacy.com/app/lewisgoddard/vala-docs-org?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=eustasy/vala-docs.org&amp;utm_campaign=Badge_Grade)
+[![Code Climate](https://codeclimate.com/github/eustasy/vala-docs.org/badges/gpa.svg)](https://codeclimate.com/github/eustasy/vala-docs.org)
 [![Bountysource](https://www.bountysource.com/badge/tracker?tracker_id=28754245)](https://www.bountysource.com/teams/eustasy/issues?tracker_ids=28754245)
 
 ## Installation
